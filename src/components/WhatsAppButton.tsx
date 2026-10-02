@@ -7,7 +7,7 @@ export default function WhatsAppButton() {
 
   return (
     <a
-      href="https://wa.me/919216507444?text=Hi%20Varun%20Estate,%20I%20would%20like%20to%20enquire%20about%20a%20property."
+      href="https://wa.me/919216507444?text=Hi%20Pahwa%20Real%20Estate,%20I%20would%20like%20to%20enquire%20about%20a%20property."
       target="_blank"
       rel="noopener noreferrer"
       className={`fixed ${onDetail ? 'bottom-24 lg:bottom-6' : 'bottom-6'} right-6 z-[6000] w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg shadow-[#25D366]/30 hover:scale-110 transition-transform duration-300`}

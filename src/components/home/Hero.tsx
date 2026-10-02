@@ -174,8 +174,8 @@ export default function Hero() {
                 <defs>
                   <path id="seal-circle" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0" />
                 </defs>
-                <text fill="currentColor" fontSize="8.6" letterSpacing="2.4" fontWeight="600">
-                  <textPath href="#seal-circle">VARUN ESTATE • SINCE 2010 • PANCHKULA •</textPath>
+                <text fill="currentColor" fontSize="7.4" letterSpacing="1.7" fontWeight="600">
+                  <textPath href="#seal-circle">PAHWA REAL ESTATE • EST. 2010 •</textPath>
                 </text>
               </svg>
               <HomeIcon size={26} className="text-gold-light" />

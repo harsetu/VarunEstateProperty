@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin } from 'lucide-react';
-import { SOCIAL_LINKS } from '@/data/contact';
+import { CONTACT, SOCIAL_LINKS } from '@/data/contact';
+import Logo from '@/components/Logo';
 
 export default function Footer() {
   return (
@@ -8,12 +9,11 @@ export default function Footer() {
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-14 lg:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           <div>
-            <h3 className="font-display font-semibold text-fg text-2xl mb-4">
-              Varun<span className="text-gold"> Estate</span>
-            </h3>
+            <Logo className="mb-5" />
             <p className="text-ash text-sm leading-relaxed">
-              Panchkula's most trusted real estate house. Building relationships, one home at a time.
+              Your trusted property partner in Panchkula — kothis, plots, floors, flats and commercial spaces.
             </p>
+            <p className="text-fg text-sm font-medium mt-4">{CONTACT.person}</p>
           </div>
 
           <div>
@@ -31,15 +31,19 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start gap-2 text-ash text-sm">
                 <MapPin size={16} className="text-gold mt-0.5 shrink-0" />
-                <span>Sector 7, Panchkula, Haryana 134109</span>
+                <span>{CONTACT.address}</span>
               </li>
-              <li className="flex items-center gap-2 text-ash text-sm">
-                <Phone size={16} className="text-gold shrink-0" />
-                <a href="tel:+919216507444" className="hover:text-gold transition-colors">+91 92165 07444</a>
+              <li className="flex items-start gap-2 text-ash text-sm">
+                <Phone size={16} className="text-gold shrink-0 mt-0.5" />
+                <span className="flex flex-col gap-1">
+                  {CONTACT.phones.map((ph) => (
+                    <a key={ph.href} href={ph.href} className="hover:text-gold transition-colors">{ph.display}</a>
+                  ))}
+                </span>
               </li>
               <li className="flex items-center gap-2 text-ash text-sm">
                 <Mail size={16} className="text-gold shrink-0" />
-                <a href="mailto:hello@varunestate.in" className="hover:text-gold transition-colors">hello@varunestate.in</a>
+                <a href={`mailto:${CONTACT.email}`} className="hover:text-gold transition-colors break-all">{CONTACT.email}</a>
               </li>
             </ul>
           </div>
@@ -57,8 +61,8 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-fg/5 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-ash-dark text-xs">© 2026 Varun Estate. All rights reserved.</p>
-          <p className="text-ash-dark text-xs">Crafted with precision in Panchkula, Haryana.</p>
+          <p className="text-ash-dark text-xs">© 2026 Pahwa Real Estate. All rights reserved.</p>
+          <p className="text-ash-dark text-xs">{CONTACT.tagline}</p>
         </div>
       </div>
     </footer>

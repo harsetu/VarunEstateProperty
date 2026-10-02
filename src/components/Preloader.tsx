@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import { CONTACT } from '@/data/contact';
+import { LogoMark } from '@/components/Logo';
 
 const TYPES = ['Kothis', 'Plots', 'Builder Floors', 'Flats', 'Commercial'];
 
@@ -35,7 +37,7 @@ export default function Preloader({ onComplete }: { onComplete?: () => void }) {
       const counter = { v: 0 };
       const tl = gsap.timeline({ onComplete: finish });
 
-      tl.from('.pl-house path', { strokeDashoffset: 300, duration: 1.1, ease: 'power2.inOut', stagger: 0.1 })
+      tl.from('.pl-mark', { scale: 0.6, opacity: 0, duration: 0.8, ease: 'back.out(1.6)' })
         .from('.pl-letter', { yPercent: 110, opacity: 0, duration: 0.6, stagger: 0.04, ease: 'power3.out' }, 0.3)
         .from('.pl-fade', { opacity: 0, y: 10, duration: 0.6, stagger: 0.12, ease: 'power2.out' }, 0.8)
         .to(counter, {
@@ -75,23 +77,18 @@ export default function Preloader({ onComplete }: { onComplete?: () => void }) {
       />
 
       <div className="pl-content relative h-full flex flex-col items-center justify-center px-6 text-center">
-        <svg className="pl-house w-20 h-20 mb-6 text-gold-light" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M8 30 L32 10 L56 30" strokeDasharray="300" />
-          <path d="M14 26 V54 H50 V26" strokeDasharray="300" />
-          <path d="M27 54 V40 H37 V54" strokeDasharray="300" />
-          <path d="M42 18 V12 H47 V22" strokeDasharray="300" />
-        </svg>
+        <div className="pl-mark mb-6"><LogoMark size={84} tone="light" /></div>
 
-        <h1 className="font-display font-semibold text-[clamp(2.5rem,7vw,4.5rem)] leading-none tracking-tight flex overflow-hidden pb-2">
-          {'Varun Estate'.split('').map((ch, i) => (
-            <span key={i} className={`pl-letter inline-block ${i > 5 ? 'italic text-gold-light' : ''}`}>
+        <h1 className="font-brand font-bold text-[clamp(1.75rem,5.5vw,3.5rem)] leading-tight tracking-[0.02em] flex flex-wrap justify-center overflow-hidden pb-2">
+          {'PAHWA REAL ESTATE'.split('').map((ch, i) => (
+            <span key={i} className={`pl-letter inline-block ${i > 5 ? 'text-[#F2B01E]' : ''}`}>
               {ch === ' ' ? ' ' : ch}
             </span>
           ))}
         </h1>
 
         <p className="pl-fade mt-4 text-white/70 text-sm sm:text-base tracking-wide">
-          Panchkula's trusted property advisors · Since 2010
+          {CONTACT.tagline}
         </p>
 
         <div className="pl-fade mt-6 flex flex-wrap justify-center gap-2">
@@ -114,7 +111,7 @@ export default function Preloader({ onComplete }: { onComplete?: () => void }) {
       </div>
 
       <p className="pl-fade absolute bottom-8 inset-x-0 text-center text-xs text-white/40">
-        Sector 7, Panchkula · +91 92165 07444
+        {CONTACT.addressShort} · {CONTACT.phoneDisplay}
       </p>
     </div>
   );

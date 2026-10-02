@@ -1,14 +1,26 @@
 import { Facebook, Instagram, Youtube, Linkedin } from 'lucide-react';
 
-// Business contact details used in the top ribbon and footer.
-// Replace '#' with the real profile URLs.
+// Business details from the visiting card — the one place to edit them.
+// Replace '#' in SOCIAL_LINKS with the real profile URLs.
 export const CONTACT = {
-  address: 'Sector 7, Panchkula, Haryana 134109',
+  company: 'Pahwa Real Estate',
+  tagline: 'Dream. Search. Live',
+  person: 'Varun Pahwa',
+  address: 'Booth No. 63, Sector 5, MDC, Panchkula',
+  addressShort: 'Sector 5, MDC, Panchkula',
+  mapQuery: 'Booth No 63, Sector 5, MDC, Panchkula, Haryana',
+  phones: [
+    { display: '+91 92165 07444', href: 'tel:+919216507444' },
+    { display: '+91 88378 25402', href: 'tel:+918837825402' },
+  ],
   phoneDisplay: '+91 92165 07444',
   phoneHref: 'tel:+919216507444',
-  email: 'hello@varunestate.in',
+  email: 'pahwarrealestate21@gmail.com',
   whatsapp: '919216507444',
 };
+
+export const mapEmbedUrl = (query: string) =>
+  `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
 
 export const whatsappLink = (text: string) =>
   `https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(text)}`;

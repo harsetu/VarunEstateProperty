@@ -16,7 +16,7 @@ const STATEMENT = [
   { text: 'location,', gold: true },
   { text: 'quality,', gold: true },
   { text: 'and trust.', gold: false },
-  { text: 'That\u2019s the Varun promise.', gold: false },
+  { text: 'That\u2019s the Pahwa promise.', gold: false },
 ];
 
 export default function Statement() {

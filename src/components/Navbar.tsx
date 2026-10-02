@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Menu, X, Phone, MapPin, Mail } from 'lucide-react';
 import { CONTACT, SOCIAL_LINKS } from '@/data/contact';
+import Logo from '@/components/Logo';
 
 const NAV_LINKS = [
   { label: 'Home', path: '/' },
@@ -73,8 +74,8 @@ export default function Navbar() {
           }`}
         >
         <nav className="max-w-[1280px] mx-auto px-5 lg:px-8 h-[72px] flex items-center justify-between">
-          <Link to="/" className={`font-display font-semibold text-2xl tracking-tight text-fg`}>
-            Varun<span className="text-gold"> Estate</span>
+          <Link to="/" aria-label="Pahwa Real Estate — home">
+            <Logo />
           </Link>
 
           <div className="hidden md:flex items-center gap-8">

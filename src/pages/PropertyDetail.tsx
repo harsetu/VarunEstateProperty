@@ -55,7 +55,7 @@ export default function PropertyDetail() {
     .map(({ p }) => p);
 
   const nearby = property.nearby ?? NEARBY_BY_SECTOR[property.sector] ?? [];
-  const ask = (what: string) => whatsappLink(`Hi Varun Estate, please share the ${what} for ${property.title} (${property.sector}).`);
+  const ask = (what: string) => whatsappLink(`Hi Pahwa Real Estate, please share the ${what} for ${property.title} (${property.sector}).`);
 
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
   const handleShare = () => {
@@ -301,7 +301,7 @@ export default function PropertyDetail() {
               </div>
 
               <div className="mt-6 bg-white rounded-2xl shadow-card p-6">
-                <p className="text-fg font-semibold mb-1">Varun Estate</p>
+                <p className="text-fg font-semibold mb-1">Pahwa Real Estate</p>
                 <p className="text-ash text-sm mb-3">Your trusted real estate partner in Panchkula.</p>
                 <a href={CONTACT.phoneHref} className="text-gold text-sm font-medium">{CONTACT.phoneDisplay}</a>
               </div>

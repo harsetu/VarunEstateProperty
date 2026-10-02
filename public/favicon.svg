@@ -1,4 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" rx="20" fill="#0A0A0A"/>
-  <text x="50" y="68" font-family="Georgia, serif" font-size="52" font-weight="bold" fill="#D4AF37" text-anchor="middle">VE</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#FFFFFF"/>
+  <g transform="translate(6.5,3.5) scale(1.0)">
+    <defs>
+      <path id="p" d="M9 4h19.5C37.6 4 44 10.4 44 19.5S37.6 35 28.5 35H21v15.5a3.5 3.5 0 0 1-3.5 3.5h-5A3.5 3.5 0 0 1 9 50.5V4Z"/>
+      <clipPath id="a"><polygon points="0,0 48,0 48,26.5 26,12 0,26.5"/></clipPath>
+      <clipPath id="b"><polygon points="0,26.5 26,12 48,26.5 48,56 0,56"/></clipPath>
+    </defs>
+    <use href="#p" fill="#F2B01E" clip-path="url(#b)"/>
+    <use href="#p" fill="#2B2B2B" clip-path="url(#a)"/>
+    <polyline points="4,28 26,13.2 47,28" fill="none" stroke="#2B2B2B" stroke-width="2.6"/>
+    <polyline points="6.5,30.8 26,17.6 45,30.8" fill="none" stroke="#F2B01E" stroke-width="1.6"/>
+    <g fill="#fff">
+      <rect x="22.4" y="24.4" width="3" height="3" rx="0.4"/>
+      <rect x="26.2" y="24.4" width="3" height="3" rx="0.4"/>
+      <rect x="22.4" y="28.2" width="3" height="3" rx="0.4"/>
+      <rect x="26.2" y="28.2" width="3" height="3" rx="0.4"/>
+    </g>
+  </g>
 </svg>

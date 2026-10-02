@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Phone, MessageCircle, ArrowRight } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
+import { CONTACT } from '@/data/contact';
 import { QUOTE_VIDEO } from '@/data/properties';
 
 export default function CtaFooter() {
@@ -22,7 +23,7 @@ export default function CtaFooter() {
             </div>
             <div className="flex flex-col sm:flex-row lg:flex-col gap-3 lg:items-end">
               <a href="tel:+919216507444" className="neopop-btn neopop-btn-dark w-full sm:w-auto lg:w-72">
-                <Phone size={17} /> Call +91 92165 07444
+                <Phone size={17} /> Call {CONTACT.phoneDisplay}
               </a>
               <a
                 href="https://wa.me/919216507444"

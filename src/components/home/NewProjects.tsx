@@ -16,7 +16,7 @@ const STATUS_STYLE: Record<ProjectStatus, string> = {
 };
 
 const enquire = (p: NewProject) =>
-  whatsappLink(`Hi Varun Estate, please share price list & brochure for ${p.name} (${p.location}).`);
+  whatsappLink(`Hi Pahwa Real Estate, please share price list & brochure for ${p.name} (${p.location}).`);
 
 // Launch → Construction → Possession, with the current stage pulsing
 function Stepper({ status }: { status: ProjectStatus }) {
@@ -88,7 +88,7 @@ export default function NewProjects() {
               Get early access, launch pricing and floor plans for the city's newest projects — before they hit the market.
             </p>
           </div>
-          <a href={whatsappLink('Hi Varun Estate, please add me to your new-launch alerts.')} target="_blank" rel="noreferrer" className="neopop-btn neopop-btn-dark shrink-0 w-fit">
+          <a href={whatsappLink('Hi Pahwa Real Estate, please add me to your new-launch alerts.')} target="_blank" rel="noreferrer" className="neopop-btn neopop-btn-dark shrink-0 w-fit">
             <MessageCircle size={16} /> Get launch alerts
           </a>
         </ScrollReveal>

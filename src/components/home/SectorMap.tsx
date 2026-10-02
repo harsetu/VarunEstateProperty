@@ -157,7 +157,7 @@ export default function SectorMap() {
               </>
             ) : (
               <a
-                href={whatsappLink(`Hi Varun Estate, I'm looking for a property in ${active}, Panchkula. Please let me know if anything comes up.`)}
+                href={whatsappLink(`Hi Pahwa Real Estate, I'm looking for a property in ${active}, Panchkula. Please let me know if anything comes up.`)}
                 target="_blank"
                 rel="noreferrer"
                 className="neopop-btn mt-6"

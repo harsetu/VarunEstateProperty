@@ -112,11 +112,11 @@ export const PROCESS_STEPS = [
 ];
 
 export const TESTIMONIALS = [
-  { quote: 'Varun Estate didn\u2019t just sell us a house. They found us a home where our children will grow up. Every detail was handled with care.', author: 'Rajesh & Sunita Sharma', location: 'Sector 7, Panchkula' },
+  { quote: 'Pahwa Real Estate didn\u2019t just sell us a house. They found us a home where our children will grow up. Every detail was handled with care.', author: 'Rajesh & Sunita Sharma', location: 'Sector 7, Panchkula' },
   { quote: 'The transparency and professionalism was unmatched. From site visits to registration, everything was seamless and stress-free.', author: 'Dr. Anil Verma', location: 'Sector 20, Panchkula' },
-  { quote: 'I invested in a commercial plot through Varun Estate. Three years later, the value has nearly doubled. Best decision I made.', author: 'Manpreet Kaur', location: 'MDC, Panchkula' },
+  { quote: 'I invested in a commercial plot through Pahwa Real Estate. Three years later, the value has nearly doubled. Best decision I made.', author: 'Manpreet Kaur', location: 'MDC, Panchkula' },
   { quote: 'They understood exactly what we wanted \u2014 a kothi with a garden, in a quiet sector. They showed us three options and we found our dream home.', author: 'Arjun & Priya Mehta', location: 'Sector 4, Panchkula' },
-  { quote: 'As an NRI, I needed someone I could trust completely. Varun Estate managed everything remotely with video tours and full documentation.', author: 'Harpreet Singh', location: 'Sector 11, Panchkula' },
+  { quote: 'As an NRI, I needed someone I could trust completely. Pahwa Real Estate managed everything remotely with video tours and full documentation.', author: 'Harpreet Singh', location: 'Sector 11, Panchkula' },
 ];
 
 export const PROPERTIES: Property[] = [

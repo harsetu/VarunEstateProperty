@@ -29,6 +29,7 @@ export default {
       fontFamily: {
         display: ['"Playfair Display"', 'Georgia', 'serif'],
         body: ['Inter', 'sans-serif'],
+        brand: ['Montserrat', 'Inter', 'sans-serif'],
       },
       fontSize: {
         // Small text bumped up a step so body copy is readable next to big headings

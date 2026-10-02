@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Phone, Mail, MapPin, Send, Check } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
+import { CONTACT, mapEmbedUrl } from '@/data/contact';
 
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
@@ -63,7 +64,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <p className="text-ash-dark text-xs uppercase tracking-wider mb-1">Office</p>
-                    <p className="text-fg">Sector 7, Panchkula, Haryana 134109</p>
+                    <p className="text-fg">{CONTACT.address}</p>
                   </div>
                 </div>
 
@@ -73,7 +74,12 @@ export default function Contact() {
                   </div>
                   <div>
                     <p className="text-ash-dark text-xs uppercase tracking-wider mb-1">Phone</p>
-                    <a href="tel:+919216507444" className="text-fg hover:text-gold transition-colors">+91 92165 07444</a>
+                    <span className="flex flex-col">
+                      {CONTACT.phones.map((ph) => (
+                        <a key={ph.href} href={ph.href} className="text-fg hover:text-gold transition-colors">{ph.display}</a>
+                      ))}
+                    </span>
+                    <p className="text-ash text-sm mt-1">{CONTACT.person}</p>
                   </div>
                 </div>
 
@@ -83,17 +89,17 @@ export default function Contact() {
                   </div>
                   <div>
                     <p className="text-ash-dark text-xs uppercase tracking-wider mb-1">Email</p>
-                    <a href="mailto:hello@varunestate.in" className="text-fg hover:text-gold transition-colors">hello@varunestate.in</a>
+                    <a href={`mailto:${CONTACT.email}`} className="text-fg hover:text-gold transition-colors break-all">{CONTACT.email}</a>
                   </div>
                 </div>
               </div>
             </ScrollReveal>
 
             <ScrollReveal delay={0.2}>
-              <div className="mt-12 h-64 bg-ink-700 border border-fg/8 overflow-hidden">
+              <div className="mt-12 h-64 rounded-2xl bg-ink-700 border border-fg/10 overflow-hidden">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430.1!2d76.85!3d30.69!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzDCsDQxJzI0LjAiTiA3NsKwNTEnMDAuMCJF!5e0!3m2!1sen!2sin!4v0000000000000"
-                  className="w-full h-full grayscale invert opacity-80"
+                  src={mapEmbedUrl(CONTACT.mapQuery)}
+                  className="w-full h-full"
                   loading="lazy"
                   title="Office location"
                 />

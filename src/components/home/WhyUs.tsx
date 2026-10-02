@@ -18,7 +18,7 @@ export default function WhyUs() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div>
             <SectionHeading
-              eyebrow="Why Varun Estate"
+              eyebrow="Why Pahwa Real Estate"
               title={<>Buying property should feel <em className="text-gold">safe</em>, not stressful</>}
               subtitle="For over 15 years, families across Panchkula have trusted us with the biggest purchase of their lives. Here's why they come back — and send their friends."
             />

@@ -63,7 +63,7 @@ export default function About() {
           </ScrollReveal>
           <ScrollReveal delay={0.1}>
             <p className="text-ash text-lg leading-relaxed mb-6">
-              For over 15 years, Varun Estate has been Panchkula's most trusted name in real estate.
+              For over 15 years, Pahwa Real Estate has been Panchkula's most trusted name in real estate.
               What began as a small family business has grown into one of the region's most respected
               property firms, serving over 500 families across Haryana.
             </p>

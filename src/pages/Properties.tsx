@@ -199,7 +199,7 @@ export default function Properties() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
               <a
-                href={whatsappLink(`Hi Varun Estate, I'm looking for: ${activeChips.map((c) => c.label).join(', ') || 'a property'} in Panchkula.`)}
+                href={whatsappLink(`Hi Pahwa Real Estate, I'm looking for: ${activeChips.map((c) => c.label).join(', ') || 'a property'} in Panchkula.`)}
                 target="_blank"
                 rel="noreferrer"
                 className="neopop-btn !bg-[#25D366] !border-[#25D366]"
@@ -236,7 +236,7 @@ function FindCta() {
           Tell us your budget and sector — we'll share matching properties that aren't on the website.
         </p>
         <a
-          href={whatsappLink('Hi Varun Estate, please share off-market properties. My budget is ___ and preferred sector is ___.')}
+          href={whatsappLink('Hi Pahwa Real Estate, please share off-market properties. My budget is ___ and preferred sector is ___.')}
           target="_blank"
           rel="noreferrer"
           className="relative neopop-btn neopop-btn-dark mt-6 w-fit"
