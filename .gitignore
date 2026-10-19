@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+.idea/
+
+# Build output
+dist/
+dist-ssr/
+build/
+coverage/
+*.tsbuildinfo
+
+# Vite / tool caches
+.vite/
+.eslintcache
+.cache/
+.parcel-cache/
+
+# Local env overrides (the shared .env.<flavor> files stay tracked; keep real secrets in *.local)
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editors / OS
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+.DS_Store
+Thumbs.db
