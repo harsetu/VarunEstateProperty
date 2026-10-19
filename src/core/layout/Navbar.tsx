@@ -87,7 +87,7 @@ export default function Navbar() {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`text-[0.9375rem] font-medium transition-colors ${
+                  className={`relative text-[0.9375rem] font-medium transition-colors after:absolute after:left-0 after:-bottom-1 after:h-px after:w-full after:origin-left after:bg-gold after:transition-transform after:duration-300 hover:after:scale-x-100 ${active ? 'after:scale-x-100' : 'after:scale-x-0'} ${
                     active
                       ? 'text-gold'
                       : 'text-ash hover:text-fg'

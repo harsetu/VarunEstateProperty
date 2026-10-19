@@ -14,7 +14,7 @@ export default function Categories() {
   const [active, setActive] = useState(0);
 
   return (
-    <section className="py-20 lg:py-28 bg-ink-900">
+    <section id="browse" className="py-20 lg:py-28 bg-ink-900 scroll-mt-24">
       <div className="max-w-[1280px] mx-auto px-5 lg:px-8">
         <SectionHeading
           eyebrow={t('categories.eyebrow')}
@@ -33,7 +33,7 @@ export default function Categories() {
                 to={linkFor(cat.name)}
                 onMouseEnter={() => setActive(i)}
                 onFocus={() => setActive(i)}
-                className={`group relative overflow-hidden rounded-t-[320px] rounded-b-[2rem] shadow-card-hover transition-[flex-grow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                className={`group relative overflow-hidden rounded-t-lg rounded-b-lg shadow-card-hover transition-[flex-grow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                   open ? 'flex-[4.2]' : 'flex-[1]'
                 }`}
               >
@@ -85,7 +85,7 @@ export default function Categories() {
             <Link
               key={cat.name}
               to={linkFor(cat.name)}
-              className="relative snap-start shrink-0 w-[72%] sm:w-[44%] h-[420px] overflow-hidden rounded-t-[200px] rounded-b-[1.75rem] shadow-card-hover"
+              className="relative snap-start shrink-0 w-[72%] sm:w-[44%] h-[420px] overflow-hidden rounded-t-lg rounded-b-lg shadow-card-hover"
             >
               <img src={cat.image} alt={cat.name} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-night/85 via-night/20 to-transparent" />

@@ -231,3 +231,12 @@ html {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Buttons: soft lift on hover */
+.neopop-btn { will-change: transform; }
+.neopop-btn:active { transform: translateY(0) scale(0.98); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .neopop-btn:hover { transform: none; }
+}

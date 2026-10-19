@@ -39,7 +39,7 @@ export default function WhyUs() {
           <div className="grid sm:grid-cols-2 gap-5">
             {REASONS.map(({ icon: Icon, title, desc }, i) => (
               <ScrollReveal key={title} delay={i * 0.06}>
-                <div className="h-full rounded-lg border border-fg/10 bg-white/60 p-7 hover:bg-white hover:shadow-card transition-all">
+                <div className="h-full rounded-lg border border-fg/10 bg-white/60 p-7 hover:bg-white hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300">
                   <div className="w-12 h-12 rounded-xl bg-gold/10 text-gold flex items-center justify-center mb-5">
                     <Icon size={22} />
                   </div>

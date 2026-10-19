@@ -32,13 +32,13 @@ export default function Hero() {
   return (
     <section className="relative isolate overflow-hidden bg-night min-h-[100svh] flex flex-col">
       {/* full-bleed photo under a top-to-bottom shade */}
-      {ARCH_MAIN && <img src={ARCH_MAIN} alt={t('hero.altMain', { market: flavor.market })} className="absolute inset-0 -z-20 w-full h-full object-cover" />}
+      {ARCH_MAIN && <img src={ARCH_MAIN} alt={t('hero.altMain', { market: flavor.market })} className="hero-kenburns absolute inset-0 -z-20 w-full h-full object-cover" />}
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/30 via-black/45 to-black/80" />
 
       <div className="flex-1 flex flex-col items-center justify-center text-center px-5 lg:px-8 pt-40 pb-10 max-w-[1100px] mx-auto w-full">
         <h1 className="hero-in font-display font-bold uppercase text-white text-[clamp(2rem,5vw,4rem)] leading-tight tracking-wide [text-shadow:0_2px_12px_rgba(0,0,0,0.35)]">
           {t('hero.titleStart')}{' '}
-          <span className="block font-script font-normal normal-case text-[clamp(3.25rem,9vw,7rem)] leading-[0.8] mt-2">
+          <span className="hero-write block font-script font-normal normal-case text-[clamp(3.25rem,9vw,7rem)] leading-[0.8] mt-2">
             {rich('hero.titleEnd', undefined, 'not-italic text-white')}
           </span>
         </h1>
@@ -94,6 +94,14 @@ export default function Hero() {
         </form>
       </div>
 
+      <a
+        href="#browse"
+        aria-label="Scroll down"
+        className="hero-in [animation-delay:600ms] absolute bottom-24 left-1/2 -translate-x-1/2 hidden [@media(min-height:940px)]:flex h-11 w-7 justify-center rounded-full border-2 border-white/60 pt-2"
+      >
+        <span className="hero-wheel block h-2 w-1 rounded-full bg-white" />
+      </a>
+
       {/* stat strip, separated by thin dividers */}
       <div className="hero-in [animation-delay:360ms] border-t border-white/15 bg-black/30 backdrop-blur-sm">
         <div className="max-w-[1100px] mx-auto px-5 lg:px-8 grid grid-cols-1 sm:grid-cols-3 sm:divide-x divide-white/20 text-center text-white">
@@ -112,7 +120,15 @@ export default function Hero() {
           from { opacity: 0; transform: translateY(18px); }
           to { opacity: 1; transform: none; }
         }
-        @media (prefers-reduced-motion: reduce) { .hero-in { animation: none; } }
+        .hero-kenburns { animation: kenburns 18s ease-out both; }
+        @keyframes kenburns { from { transform: scale(1.12); } to { transform: scale(1); } }
+        .hero-write { animation: heroWrite 1.6s 0.5s cubic-bezier(0.65, 0, 0.35, 1) both; }
+        @keyframes heroWrite { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 -2% 0 0); } }
+        .hero-wheel { animation: wheel 1.6s ease-in-out infinite; }
+        @keyframes wheel { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(14px); opacity: 0; } 100% { opacity: 0; } }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-in, .hero-kenburns, .hero-write, .hero-wheel { animation: none; }
+        }
       `}</style>
     </section>
   );
