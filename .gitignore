@@ -9,6 +9,8 @@ build/
 coverage/
 *.tsbuildinfo
 
+.claude/
+
 # Vite / tool caches
 .vite/
 .eslintcache
