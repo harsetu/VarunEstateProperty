@@ -30,7 +30,7 @@ export default function Navbar() {
   }, [location.pathname]);
 
   // Transparent over the home hero until the page is scrolled
-  const overHero = location.pathname === '/' && !scrolled && !open;
+  const overHero = false;
 
   return (
     <>
@@ -99,8 +99,8 @@ export default function Navbar() {
             })}
             <a
               href={CONTACT.phoneHref}
-              className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors ${
-                'bg-fg text-white hover:bg-gold'
+              className={`inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium transition-colors ${
+                'border border-fg/15 bg-ink-900 text-fg hover:border-gold hover:text-gold-dark'
               }`}
             >
               <Phone size={15} /> {CONTACT.phoneDisplay}

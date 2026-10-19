@@ -6,11 +6,11 @@ export default {
       colors: {
         // Light theme: "ink" are the surfaces (900 = page background)
         ink: {
-          900: '#FAF8F4',
-          800: '#F3EFE7',
+          900: '#FFFFFF',
+          800: '#F5F5F5',
           700: '#FFFFFF',
-          600: '#ECE7DD',
-          500: '#E2DCD0',
+          600: '#EBEBEB',
+          500: '#DCDCDC',
         },
         fg: '#16171B',
         night: '#14151A',
@@ -27,8 +27,9 @@ export default {
         },
       },
       fontFamily: {
-        display: ['"Playfair Display"', 'Georgia', 'serif'],
-        body: ['Inter', 'sans-serif'],
+        display: ['Lato', 'Inter', 'sans-serif'],
+        body: ['Lato', 'Inter', 'sans-serif'],
+        script: ['"Mrs Saint Delafield"', 'cursive'],
         brand: ['Montserrat', 'Inter', 'sans-serif'],
       },
       fontSize: {
@@ -39,7 +40,7 @@ export default {
         'mega': ['clamp(3rem, 12vw, 10rem)', { lineHeight: '0.85', letterSpacing: '-0.05em' }],
       },
       boxShadow: {
-        card: '0 1px 2px rgba(22,23,27,0.04), 0 8px 24px rgba(22,23,27,0.06)',
+        card: '0 1px 2px rgba(22,23,27,0.05), 0 4px 12px rgba(22,23,27,0.05)',
         'card-hover': '0 2px 4px rgba(22,23,27,0.05), 0 20px 40px rgba(22,23,27,0.12)',
         'card-3d': '0 4px 8px rgba(22,23,27,0.05), 0 30px 60px -12px rgba(22,23,27,0.28)',
       },
