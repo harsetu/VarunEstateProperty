@@ -29,16 +29,18 @@ export default function WhyUs() {
             />
             <div className="grid grid-cols-2 gap-4">
               {STATS.map((stat, i) => (
-                <div key={stat.label} className="rounded-lg bg-white shadow-card p-6">
-                  <Counter value={stat.value} suffix={stat.suffix} label={stat.label} index={i} />
-                </div>
+                <ScrollReveal key={stat.label} from="left" delay={i * 0.08}>
+                  <div className="rounded-lg bg-white shadow-card p-6">
+                    <Counter value={stat.value} suffix={stat.suffix} label={stat.label} index={i} />
+                  </div>
+                </ScrollReveal>
               ))}
             </div>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-5">
             {REASONS.map(({ icon: Icon, title, desc }, i) => (
-              <ScrollReveal key={title} delay={i * 0.06}>
+              <ScrollReveal key={title} from={i % 2 ? 'right' : 'scale'} delay={i * 0.1}>
                 <div className="h-full rounded-lg border border-fg/10 bg-white/60 p-7 hover:bg-white hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300">
                   <div className="w-12 h-12 rounded-xl bg-gold/10 text-gold flex items-center justify-center mb-5">
                     <Icon size={22} />

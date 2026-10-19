@@ -16,7 +16,7 @@ export default function Process() {
         />
 
         <div className="relative grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="hidden lg:block absolute top-7 left-[12.5%] right-[12.5%] h-px bg-gold/30" />
+          <div className="process-line hidden lg:block absolute top-7 left-[12.5%] right-[12.5%] h-px bg-gold/30 origin-left" />
           {PROCESS_STEPS.map((step, i) => (
             <ScrollReveal key={step.number} delay={i * 0.08} className="relative text-center px-4">
               <div className="relative mx-auto w-14 h-14 rounded-full bg-white shadow-card border border-gold/30 flex items-center justify-center font-display font-semibold text-gold text-lg mb-5">

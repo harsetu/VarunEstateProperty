@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin } from 'lucide-react';
 import { CONTACT } from '@/core/config/contact';
 import { SOCIAL_LINKS } from '@/core/utils/socialLinks';
+import ScrollReveal from '@/core/widgets/ScrollReveal';
 import Logo from '@/core/widgets/Logo';
 import { t } from '@/core/utils/i18n';
 import flavor from '@/flavors';
@@ -9,7 +10,7 @@ import flavor from '@/flavors';
 export default function Footer() {
   return (
     <footer className="relative bg-ink-800 border-t border-fg/10 overflow-hidden">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-14 lg:py-20">
+      <ScrollReveal y={36} className="max-w-[1400px] mx-auto px-6 lg:px-12 py-14 lg:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           <div>
             <Logo className="mb-5" />
@@ -67,7 +68,7 @@ export default function Footer() {
           <p className="text-ash-dark text-xs">{t('footer.rights', { year: new Date().getFullYear(), company: CONTACT.company })}</p>
           <p className="text-ash-dark text-xs">{CONTACT.tagline}</p>
         </div>
-      </div>
+      </ScrollReveal>
     </footer>
   );
 }

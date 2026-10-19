@@ -36,6 +36,7 @@ const flavor: Flavor = {
   },
   content: {
     ...pahwa.content,
+    heroVideo: { url: '/world-street-hero.mp4', poster: pahwa.content.heroVideo.poster },
     sectorInfo: Object.fromEntries(
       SECTORS.slice(1).map((s) => [s, { vibe: `Popular address in ${s}, Faridabad — add a short description.`, tags: ['Well connected', 'Growing demand'] }]),
     ),

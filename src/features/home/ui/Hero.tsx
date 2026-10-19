@@ -14,8 +14,9 @@ const selectClass =
 
 export default function Hero() {
   const navigate = useNavigate();
-  const { hero, sectors } = useHomeViewModel();
+  const { hero, sectors, content } = useHomeViewModel();
   const { main: ARCH_MAIN } = hero;
+  const { url: VIDEO, poster: POSTER } = content.heroVideo;
   const [purpose, setPurpose] = useState<'Sale' | 'Rent'>('Sale');
   const [type, setType] = useState('All');
   const [sector, setSector] = useState('All');
@@ -31,8 +32,21 @@ export default function Hero() {
 
   return (
     <section className="relative isolate overflow-hidden bg-night min-h-[100svh] flex flex-col">
-      {/* full-bleed photo under a top-to-bottom shade */}
-      {ARCH_MAIN && <img src={ARCH_MAIN} alt={t('hero.altMain', { market: flavor.market })} className="hero-kenburns absolute inset-0 -z-20 w-full h-full object-cover" />}
+      {/* full-bleed looping video under a top-to-bottom shade */}
+      {/* the clip has blurred side bars baked in; scale up on wide screens so only the real footage shows */}
+      <div className="absolute inset-0 -z-20 md:scale-[1.55]">
+      <video
+        className="hero-kenburns w-full h-full object-cover"
+        src={VIDEO}
+        poster={POSTER || ARCH_MAIN}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+      />
+      </div>
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/30 via-black/45 to-black/80" />
 
       <div className="flex-1 flex flex-col items-center justify-center text-center px-5 lg:px-8 pt-40 pb-10 max-w-[1100px] mx-auto w-full">
