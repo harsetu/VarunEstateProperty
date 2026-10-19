@@ -27,8 +27,8 @@ export default function SectorMap() {
   const types = [...new Set(listings.map((p) => p.type))];
 
   return (
-    <section className="py-20 lg:py-28 px-5 lg:px-8 bg-ink-800 overflow-hidden">
-      <div className="max-w-[1280px] mx-auto">
+    <section className="py-20 lg:py-28 bg-ink-800 overflow-hidden">
+      <div className="max-w-[1280px] mx-auto px-5 lg:px-8">
         <SectionHeading
           eyebrow={t('sectors.eyebrow')}
           title={rich('sectors.title')}

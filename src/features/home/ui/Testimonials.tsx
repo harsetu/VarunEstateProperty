@@ -20,7 +20,7 @@ export default function Testimonials() {
       <div className="flex lg:grid lg:grid-cols-3 gap-5 overflow-x-auto lg:overflow-visible snap-x snap-mandatory px-5 lg:px-8 max-w-[1280px] mx-auto pb-4 [scrollbar-width:none]">
         {TESTIMONIALS.slice(0, 3).map((story, i) => (
           <ScrollReveal key={story.author} delay={i * 0.08} className="snap-start shrink-0 w-[85%] sm:w-[60%] lg:w-auto">
-            <figure className="h-full flex flex-col rounded-2xl bg-white shadow-card p-7">
+            <figure className="h-full flex flex-col rounded-lg bg-white shadow-card p-7">
               <div className="flex items-center justify-between mb-5">
                 <div className="flex gap-0.5">
                   {Array.from({ length: 5 }).map((_, s) => (

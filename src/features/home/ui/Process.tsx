@@ -7,8 +7,8 @@ import { t } from '@/core/utils/i18n';
 export default function Process() {
   const { processSteps: PROCESS_STEPS } = useHomeContent();
   return (
-    <section className="py-20 lg:py-28 px-5 lg:px-8 bg-ink-800">
-      <div className="max-w-[1280px] mx-auto">
+    <section className="py-20 lg:py-28 bg-ink-800">
+      <div className="max-w-[1280px] mx-auto px-5 lg:px-8">
         <SectionHeading
           center
           eyebrow={t('process.eyebrow')}

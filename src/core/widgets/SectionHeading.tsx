@@ -16,11 +16,11 @@ export default function SectionHeading({ eyebrow, title, subtitle, action, cente
       }`}
     >
       <div className={center ? 'max-w-2xl' : 'max-w-2xl'}>
-        <p className="text-gold text-sm font-semibold uppercase tracking-[0.18em] mb-3">{eyebrow}</p>
-        <h2 className="font-display font-semibold text-fg text-[clamp(1.875rem,3.5vw,2.75rem)] leading-tight tracking-tight">
+        <p className="text-gold-dark text-sm font-bold uppercase tracking-[0.2em] mb-3">{eyebrow}</p>
+        <h2 className="font-display font-light text-fg text-[clamp(2rem,4vw,3rem)] leading-tight">
           {title}
         </h2>
-        {subtitle && <p className="text-ash mt-4 leading-relaxed">{subtitle}</p>}
+        {subtitle && <p className="text-ash-light mt-4 leading-relaxed">{subtitle}</p>}
       </div>
       {action}
     </ScrollReveal>

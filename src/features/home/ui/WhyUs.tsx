@@ -18,8 +18,8 @@ const REASONS = [
 export default function WhyUs() {
   const { stats: STATS } = useHomeContent();
   return (
-    <section className="py-20 lg:py-28 px-5 lg:px-8 bg-ink-900">
-      <div className="max-w-[1280px] mx-auto">
+    <section className="py-20 lg:py-28 bg-ink-900">
+      <div className="max-w-[1280px] mx-auto px-5 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div>
             <SectionHeading
@@ -29,7 +29,7 @@ export default function WhyUs() {
             />
             <div className="grid grid-cols-2 gap-4">
               {STATS.map((stat, i) => (
-                <div key={stat.label} className="rounded-2xl bg-white shadow-card p-6">
+                <div key={stat.label} className="rounded-lg bg-white shadow-card p-6">
                   <Counter value={stat.value} suffix={stat.suffix} label={stat.label} index={i} />
                 </div>
               ))}
@@ -39,7 +39,7 @@ export default function WhyUs() {
           <div className="grid sm:grid-cols-2 gap-5">
             {REASONS.map(({ icon: Icon, title, desc }, i) => (
               <ScrollReveal key={title} delay={i * 0.06}>
-                <div className="h-full rounded-2xl border border-fg/10 bg-white/60 p-7 hover:bg-white hover:shadow-card transition-all">
+                <div className="h-full rounded-lg border border-fg/10 bg-white/60 p-7 hover:bg-white hover:shadow-card transition-all">
                   <div className="w-12 h-12 rounded-xl bg-gold/10 text-gold flex items-center justify-center mb-5">
                     <Icon size={22} />
                   </div>

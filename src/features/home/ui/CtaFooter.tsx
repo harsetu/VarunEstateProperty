@@ -9,9 +9,9 @@ import flavor from '@/flavors';
 export default function CtaFooter() {
   const { quoteVideo: QUOTE_VIDEO } = useHomeContent();
   return (
-    <section className="px-5 lg:px-8 pb-20 lg:pb-28 bg-ink-900">
-      <ScrollReveal className="max-w-[1280px] mx-auto">
-        <div className="relative overflow-hidden rounded-3xl">
+    <section className="pb-20 lg:pb-28 bg-ink-900">
+      <ScrollReveal className="max-w-[1280px] mx-auto px-5 lg:px-8">
+        <div className="relative overflow-hidden rounded-lg">
           <img src={QUOTE_VIDEO.poster} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-r from-night/90 via-night/75 to-night/40" />
 

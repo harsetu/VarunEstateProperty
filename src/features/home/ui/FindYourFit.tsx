@@ -65,8 +65,8 @@ export default function FindYourFit() {
   const matches = persona.pick([...properties]).slice(0, 2);
 
   return (
-    <section className="py-20 lg:py-28 px-5 lg:px-8 bg-ink-900">
-      <div className="max-w-[1280px] mx-auto">
+    <section className="py-20 lg:py-28 bg-ink-900">
+      <div className="max-w-[1280px] mx-auto px-5 lg:px-8">
         <SectionHeading
           center
           eyebrow={t('fit.eyebrow')}
@@ -93,7 +93,7 @@ export default function FindYourFit() {
 
         <div key={persona.id} className="grid lg:grid-cols-[1fr_1.2fr] gap-8 lg:gap-12 items-center rounded-[2rem] bg-white shadow-card p-6 sm:p-10 animate-[fitIn_0.45s_cubic-bezier(0.22,1,0.36,1)]">
           <div>
-            <div className="w-14 h-14 rounded-2xl bg-gold/10 text-gold flex items-center justify-center mb-5">
+            <div className="w-14 h-14 rounded-lg bg-gold/10 text-gold flex items-center justify-center mb-5">
               <persona.icon size={26} />
             </div>
             <h3 className="font-display font-semibold text-fg text-[clamp(1.5rem,2.6vw,2.1rem)] leading-tight">{persona.headline}</h3>

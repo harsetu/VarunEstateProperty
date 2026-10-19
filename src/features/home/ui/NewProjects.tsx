@@ -76,11 +76,11 @@ export default function NewProjects() {
   const [lead, ...rest] = projects;
 
   return (
-    <section className="relative py-20 lg:py-28 px-5 lg:px-8 bg-night overflow-hidden">
+    <section className="relative py-20 lg:py-28 bg-night overflow-hidden">
       <div className="absolute -top-32 right-0 w-[520px] h-[520px] rounded-full bg-gold/10 blur-[120px]" />
       <div className="absolute -bottom-40 -left-20 w-[420px] h-[420px] rounded-full bg-gold/5 blur-[100px]" />
 
-      <div className="relative max-w-[1280px] mx-auto">
+      <div className="relative max-w-[1280px] mx-auto px-5 lg:px-8">
         <ScrollReveal className="mb-10 lg:mb-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
           <div className="max-w-2xl">
             <p className="text-gold-light text-sm font-semibold uppercase tracking-[0.18em] mb-3 flex items-center gap-2">
@@ -90,8 +90,8 @@ export default function NewProjects() {
               </span>
               {t('projects.eyebrow')}
             </p>
-            <h2 className="font-display font-semibold text-white text-[clamp(1.875rem,3.5vw,2.75rem)] leading-tight tracking-tight">
-              {rich('projects.title', { market: flavor.market }, 'text-gold-light')}
+            <h2 className="font-display font-light text-white text-[clamp(2rem,4vw,3rem)] leading-tight">
+              {rich('projects.title', { market: flavor.market }, 'font-script not-italic font-normal text-gold-light text-[1.25em] leading-none')}
             </h2>
             <p className="text-white/65 mt-4 leading-relaxed">
               {t('projects.subtitle')}
@@ -106,7 +106,7 @@ export default function NewProjects() {
           {/* Lead project */}
           <ScrollReveal>
             <article className="group h-full flex flex-col rounded-[2rem] bg-white/[0.04] border border-white/10 hover:border-gold/40 p-3 transition-colors">
-              <div className="relative h-[340px] sm:h-[400px] rounded-2xl overflow-hidden">
+              <div className="relative h-[340px] sm:h-[400px] rounded-lg overflow-hidden">
                 <img src={lead.image || images.placeholder} alt={lead.name} loading="lazy" className="w-full h-full object-cover transition-transform duration-[1.2s] group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-night/85 via-night/10 to-transparent" />
                 <div className="absolute bottom-5 left-6 right-6 flex items-end justify-between gap-4">
@@ -144,7 +144,7 @@ export default function NewProjects() {
             {rest.map((p, i) => (
               <ScrollReveal key={p.id} delay={i * 0.08} className="flex-1">
                 <article className="group h-full grid sm:grid-cols-[170px_1fr] gap-5 rounded-[2rem] bg-white/[0.04] border border-white/10 hover:border-gold/40 p-3 transition-colors">
-                  <div className="relative h-48 sm:h-full min-h-[200px] rounded-2xl overflow-hidden">
+                  <div className="relative h-48 sm:h-full min-h-[200px] rounded-lg overflow-hidden">
                     <img src={p.image || images.placeholder} alt={p.name} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.2s] group-hover:scale-105" />
                     <span className={`absolute bottom-3 left-3 px-2.5 py-1 rounded-full text-[0.6875rem] font-semibold shadow ${STATUS_STYLE[p.status]}`}>{t(`projects.status.${p.status}`)}</span>
                   </div>
