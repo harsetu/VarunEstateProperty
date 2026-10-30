@@ -22,4 +22,13 @@ export const contact = {
   'contact.messagePh': "Tell us what you're looking for...",
   'contact.sending': 'Sending…',
   'contact.submit': 'Send Message',
+  'contact.notConnected': "Messages can't be sent right now. Please call or email us instead.",
+  'contact.historyTitle': 'Your messages',
+  'contact.historyNote': 'Saved on this device only.',
+  'contact.historySent': 'Sent',
+  'contact.historyFailed': 'Not sent',
+  'contact.historyRetry': 'Try again',
+  'contact.historyRetrying': 'Sending…',
+  'contact.historyRemove': 'Remove from history',
+  'contact.historyClear': 'Clear history',
 } as const;

@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Menu, X, Phone, MapPin, Mail } from 'lucide-react';
-import { CONTACT } from '@/core/config/contact';
+import { CONTACT, mapLink } from '@/core/config/contact';
 import { SOCIAL_LINKS } from '@/core/utils/socialLinks';
 import Logo from '@/core/widgets/Logo';
 import { t } from '@/core/utils/i18n';
@@ -43,9 +43,14 @@ export default function Navbar() {
         >
           <div className="max-w-[1280px] mx-auto h-10 px-5 lg:px-8 flex items-center justify-between gap-4 text-[0.8125rem]">
             <div className="flex items-center gap-5 min-w-0">
-              <span className="hidden sm:flex items-center gap-1.5 truncate">
-                <MapPin size={14} className="shrink-0" /> {CONTACT.address}
-              </span>
+              <a
+                href={mapLink()}
+                target="_blank"
+                rel="noreferrer"
+                className="hidden sm:flex items-center gap-1.5 truncate hover:text-fg transition-colors"
+              >
+                <MapPin size={14} className="shrink-0" /> {CONTACT.addressShort}
+              </a>
               <a href={CONTACT.phoneHref} className="flex items-center gap-1.5 hover:text-fg transition-colors shrink-0">
                 <Phone size={14} /> {CONTACT.phoneDisplay}
               </a>

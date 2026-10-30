@@ -55,7 +55,7 @@ export class ApiPropertyRepository implements PropertyRepository {
    */
   search = async (q: PropertyQuery): Promise<PropertyPage> => {
     const listingType = q.purpose === 'Sale' ? 'SELL' : q.purpose === 'Rent' ? 'RENT' : undefined;
-    if (q.type !== 'All' || q.sector !== 'All' || q.label !== 'All' || q.sort !== 'recommended') return pageOf(await this.fetchAll(listingType), q);
+    if (q.type !== 'All' || q.segment !== 'All' || q.sector !== 'All' || q.label !== 'All' || q.sort !== 'recommended') return pageOf(await this.fetchAll(listingType), q);
     const res = await this.page(q.page - 1, q.size, listingType);
     const totalPages = Math.max(1, res?.totalPages ?? 1);
     return { items: (res?.content ?? []).map(fromSummary), total: res?.totalElements ?? 0, page: q.page, totalPages };

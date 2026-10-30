@@ -13,6 +13,8 @@ import type { ContactRepository } from '@/features/contact/repository/ContactRep
 import { ApiContactRepository } from '@/features/contact/repository/ApiContactRepository';
 import type { LocationSearchRepository } from '@/features/admin/repository/LocationSearchRepository';
 import { NominatimLocationSearch } from '@/features/admin/repository/NominatimLocationSearch';
+import type { ReviewRepository } from '@/features/reviews/repository/ReviewRepository';
+import { ApiReviewRepository } from '@/features/reviews/repository/ApiReviewRepository';
 import { ApiUserRepository } from '@/features/admin/repository/ApiUserRepository';
 
 // Composition root: the only place that knows which implementations back the app.
@@ -36,6 +38,8 @@ export const authService: AuthService | null = apiRoot ? new ApiAuthService(apiR
 export const listingAdmin: ListingAdminRepository | null = apiRoot ? new ApiListingAdmin(apiRoot) : null;
 export const profileRepository: ProfileRepository | null = apiRoot ? new ApiProfileRepository(apiRoot) : null;
 export const userRepository: UserRepository | null = apiRoot ? new ApiUserRepository(apiRoot) : null;
+/** null until an API is configured; the website then hides its reviews section. */
+export const reviewRepository: ReviewRepository | null = apiRoot ? new ApiReviewRepository(apiRoot) : null;
 export const dashboardRepository: DashboardRepository | null = apiRoot ? new ApiDashboardRepository(apiRoot) : null;
 export const homeRepository: HomeRepository = new FlavorHomeRepository(flavor);
 /** null until an API is configured; the contact form then only confirms on screen. */

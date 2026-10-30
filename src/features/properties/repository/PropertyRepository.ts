@@ -6,6 +6,8 @@ export type SortKey = 'recommended' | 'price-asc' | 'price-desc';
 export interface PropertyQuery {
   purpose: string;
   type: string;
+  /** 'Residential' (everything but Commercial), 'Commercial', 'Investment' (new launches), or 'All'. */
+  segment: string;
   sector: string;
   /** A listing label such as NEW_LAUNCH, or 'All'. */
   label: string;

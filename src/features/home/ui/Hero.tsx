@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, ShieldCheck, Star, ArrowUpRight, Home as HomeIcon } from 'lucide-react';
 import { TYPES } from '@/features/properties/data/propertyOptions';
-import { CONTACT } from '@/core/config/contact';
+import { CONTACT, whatsappLink } from '@/core/config/contact';
 import flavor from '@/flavors';
 import { t } from '@/core/utils/i18n';
 import { rich } from '@/core/utils/rich';
@@ -21,16 +21,21 @@ export default function Hero() {
   const { hero, sectors } = useHomeViewModel();
   const { main: ARCH_MAIN, side: ARCH_SIDE, pill: PILL_IMG, justListed: JUST_LISTED } = hero;
   const collageRef = useRef<HTMLDivElement>(null);
-  const [purpose, setPurpose] = useState<'Sale' | 'Rent'>('Sale');
+  const [mode, setMode] = useState<'buy' | 'invest' | 'sell'>('buy');
+  const [segment, setSegment] = useState<'residential' | 'commercial'>('residential');
   const [type, setType] = useState('All');
+  const residentialTypes = TYPES.filter((o) => o !== 'Commercial');
+  const showType = mode === 'buy' && segment === 'residential';
   const [sector, setSector] = useState('All');
 
   const search = (e: React.FormEvent) => {
     e.preventDefault();
-    const params = new URLSearchParams({ purpose });
-    if (type !== 'All') params.set('type', type);
+    const segmentParam = mode === 'invest' ? 'Investment' : segment === 'commercial' ? 'Commercial' : 'Residential';
+    const params = new URLSearchParams({ segment: segmentParam });
+    const chosenType = segmentParam === 'Residential' ? type : segmentParam;
+    if (segmentParam === 'Residential' && type !== 'All') params.set('type', type);
     if (sector !== 'All') params.set('sector', sector);
-    analytics.track(AnalyticsEvent.searchSubmit, { purpose, type, sector });
+    analytics.track(AnalyticsEvent.searchSubmit, { purpose: 'Sale', type: chosenType, sector });
     navigate(`/properties?${params}`);
   };
 
@@ -91,30 +96,68 @@ export default function Hero() {
             onSubmit={search}
             className="hero-in [animation-delay:240ms] mt-9 max-w-2xl bg-white rounded-2xl shadow-card-hover border border-fg/5 p-2"
           >
-            <div className="flex gap-1 p-1 mb-2 w-fit bg-ink-800 rounded-full">
-              {(['Sale', 'Rent'] as const).map((p) => (
-                <button
-                  key={p}
-                  type="button"
-                  onClick={() => setPurpose(p)}
-                  className={`px-5 py-1.5 rounded-full text-sm font-semibold transition-colors ${
-                    purpose === p ? 'bg-fg text-white' : 'text-ash hover:text-fg'
-                  }`}
-                >
-                  {p === 'Sale' ? t('hero.buy') : t('hero.rent')}
-                </button>
-              ))}
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              <div className="flex gap-1 p-1 w-fit bg-ink-800 rounded-full">
+                {(['buy', 'invest', 'sell'] as const).map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    onClick={() => setMode(m)}
+                    className={`px-5 py-1.5 rounded-full text-sm font-semibold transition-colors ${
+                      mode === m ? 'bg-fg text-white' : 'text-ash hover:text-fg'
+                    }`}
+                  >
+                    {t(m === 'buy' ? 'hero.buy' : m === 'invest' ? 'hero.invest' : 'hero.sell')}
+                  </button>
+                ))}
+              </div>
+              {mode === 'buy' && (
+                <div className="flex gap-1 p-1 w-fit bg-ink-800 rounded-full">
+                  {(['residential', 'commercial'] as const).map((sg) => (
+                    <button
+                      key={sg}
+                      type="button"
+                      onClick={() => { setSegment(sg); setType('All'); }}
+                      className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-colors ${
+                        segment === sg ? 'bg-gold text-white' : 'text-ash hover:text-fg'
+                      }`}
+                    >
+                      {t(sg === 'residential' ? 'hero.residential' : 'hero.commercial')}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-2">
+            {mode === 'sell' ? (
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 px-4 py-4">
+                <p className="text-ash text-[0.9375rem] flex-1">{t('hero.sellText')}</p>
+                <div className="flex gap-2 shrink-0">
+                  <Link to="/contact" className="rounded-xl bg-fg hover:bg-gold text-white font-semibold px-6 py-3 transition-colors">
+                    {t('hero.sellCta')}
+                  </Link>
+                  <a
+                    href={whatsappLink(t('hero.sellWhatsapp', { company: CONTACT.company }))}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-xl border border-fg/15 hover:border-gold text-fg font-semibold px-6 py-3 transition-colors"
+                  >
+                    WhatsApp
+                  </a>
+                </div>
+              </div>
+            ) : (
+            <div className={`grid grid-cols-1 gap-2 ${showType ? 'sm:grid-cols-[1fr_1fr_auto]' : 'sm:grid-cols-[1fr_auto]'}`}>
+              {showType && (
               <label className="rounded-xl px-4 py-3 hover:bg-ink-900 transition-colors">
                 <span className="block text-xs font-semibold text-ash-dark uppercase tracking-wider mb-1">{t('hero.propertyType')}</span>
                 <select value={type} onChange={(e) => setType(e.target.value)} className={selectClass}>
-                  {TYPES.map((opt) => (
+                  {residentialTypes.map((opt) => (
                     <option key={opt} value={opt}>{opt === 'All' ? t('hero.anyType') : opt}</option>
                   ))}
                 </select>
               </label>
-              <label className="rounded-xl px-4 py-3 hover:bg-ink-900 transition-colors sm:border-l sm:border-fg/10">
+              )}
+              <label className={`rounded-xl px-4 py-3 hover:bg-ink-900 transition-colors ${showType ? 'sm:border-l sm:border-fg/10' : ''}`}>
                 <span className="block text-xs font-semibold text-ash-dark uppercase tracking-wider mb-1">{t('hero.location')}</span>
                 <select value={sector} onChange={(e) => setSector(e.target.value)} className={selectClass}>
                   {['All', ...sectors].map((s) => (
@@ -129,6 +172,7 @@ export default function Hero() {
                 <Search size={18} /> {t('hero.search')}
               </button>
             </div>
+            )}
           </form>
 
           <div className="hero-in [animation-delay:320ms] mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
@@ -179,7 +223,7 @@ export default function Hero() {
                   <path id="seal-circle" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0" />
                 </defs>
                 <text fill="currentColor" fontSize="7.4" letterSpacing="1.7" fontWeight="600">
-                  <textPath href="#seal-circle">{CONTACT.company.toUpperCase()} • EST. 2010 •</textPath>
+                  <textPath href="#seal-circle">{CONTACT.company.toUpperCase()} • EST. 2008 •</textPath>
                 </text>
               </svg>
               <HomeIcon size={26} className="text-gold-light" />

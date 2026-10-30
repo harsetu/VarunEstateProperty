@@ -86,10 +86,12 @@ export class ApiUserRepository implements UserRepository {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        roles: mail.roles,
+        // either exactly these users, or whole groups (optionally a range of them)
+        ...(mail.userIds ? { userIds: mail.userIds } : { roles: mail.roles }),
         subject: mail.subject.trim(),
         message: mail.message.trim(),
         // only sent when used, so plain mails stay exactly as before
+        ...(mail.range && { range: mail.range }),
         ...(mail.images?.length && { images: mail.images }),
         ...(mail.attachments?.length && { attachments: mail.attachments }),
       }),

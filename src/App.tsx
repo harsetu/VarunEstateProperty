@@ -23,6 +23,7 @@ import AdminLayout from '@/features/admin/ui/AdminLayout';
 import AdminHome from '@/features/admin/ui/AdminHome';
 import AdminPublish from '@/features/admin/ui/AdminPublish';
 import AdminUsers from '@/features/admin/ui/AdminUsers';
+import AdminReviews from '@/features/admin/ui/AdminReviews';
 import AdminProfile from '@/features/admin/ui/AdminProfile';
 import { analytics } from '@/core/analytics/analytics';
 
@@ -66,6 +67,7 @@ function SiteShell() {
           <Route path="/admin/listings" element={<AdminListings />} />
           <Route path="/admin/publish" element={<AdminPublish />} />
           <Route path="/admin/publish/:id" element={<AdminPublish />} />
+          <Route path="/admin/reviews" element={<AdminReviews />} />
           <Route path="/admin/users" element={<AdminUsers />} />
           <Route path="/admin/profile" element={<AdminProfile />} />
         </Route>

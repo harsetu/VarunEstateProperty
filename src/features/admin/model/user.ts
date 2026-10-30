@@ -54,10 +54,29 @@ export interface MailAttachment {
   contentType: string;
 }
 
+/** Inclusive 1-based positions among the chosen recipients (oldest user first), e.g. 1–100. */
+export interface RecipientRange {
+  from: number;
+  to: number;
+}
+
+/** Reads "1-100" (also "1 – 100", "1 to 100"). Null when it isn't a valid range. */
+export const parseRecipientRange = (text: string): RecipientRange | null => {
+  const m = text.trim().match(/^(\d+)\s*(?:-|–|—|to)\s*(\d+)$/i);
+  if (!m) return null;
+  const from = Number(m[1]);
+  const to = Number(m[2]);
+  return from >= 1 && to >= from ? { from, to } : null;
+};
+
 export interface BroadcastEmail {
   roles: UserRole[];
   subject: string;
   message: string;
+  /** Email exactly these users instead of whole groups (`roles` and `range` are then ignored). */
+  userIds?: number[];
+  /** Only email these positions among the chosen roles. Everyone when omitted. */
+  range?: RecipientRange;
   /** Image URLs shown in the body of the mail. */
   images?: string[];
   /** Files (PDF, Word, images) attached to the mail. */

@@ -1,5 +1,5 @@
 import { Link, NavLink, Navigate, Outlet, useLocation } from 'react-router-dom';
-import { ArrowLeft, Home, LayoutList, PlusCircle, Users, User } from 'lucide-react';
+import { ArrowLeft, Home, LayoutList, PlusCircle, Star, Users, User } from 'lucide-react';
 import { CONTACT } from '@/core/config/contact';
 import { useAdminAuth } from '@/features/admin/viewmodel/AdminAuthProvider';
 import { t } from '@/core/utils/i18n';
@@ -8,6 +8,7 @@ const MENU = [
   { to: '/admin/home', label: t('admin.menu.home'), icon: Home },
   { to: '/admin/listings', label: t('admin.menu.listings'), icon: LayoutList },
   { to: '/admin/publish', label: t('admin.menu.publish'), icon: PlusCircle },
+  { to: '/admin/reviews', label: t('admin.menu.reviews'), icon: Star },
   { to: '/admin/users', label: t('admin.menu.users'), icon: Users },
   { to: '/admin/profile', label: t('admin.menu.profile'), icon: User },
 ];
@@ -66,7 +67,7 @@ export default function AdminLayout() {
       </main>
 
       {/* Mobile bottom navigation */}
-      <nav className="lg:hidden fixed inset-x-0 bottom-0 z-30 h-16 bg-white border-t border-fg/10 grid grid-cols-5">
+      <nav className="lg:hidden fixed inset-x-0 bottom-0 z-30 h-16 bg-white border-t border-fg/10 grid grid-cols-6">
         {MENU.map(({ to, label, icon: Icon }) => (
           <NavLink
             key={to}

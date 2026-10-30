@@ -6,6 +6,7 @@ import FindYourFit from '@/features/home/ui/FindYourFit';
 import WhyUs from '@/features/home/ui/WhyUs';
 import Process from '@/features/home/ui/Process';
 import Testimonials from '@/features/home/ui/Testimonials';
+import Reviews from '@/features/home/ui/Reviews';
 import CtaFooter from '@/features/home/ui/CtaFooter';
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
       <Hero />
       <Categories />
       <NewProjects />
+      <Reviews />
       <SectorMap />
       <FindYourFit />
       <WhyUs />

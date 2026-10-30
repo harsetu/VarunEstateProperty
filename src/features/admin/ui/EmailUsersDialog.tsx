@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { CheckCircle2, FileText, ImagePlus, Loader2, Paperclip, Send, X } from 'lucide-react';
+import { CheckCircle2, FileText, ImagePlus, Loader2, Paperclip, Search, Send, X } from 'lucide-react';
 import Modal from '@/core/widgets/Modal';
 import ConfirmDialog from '@/core/widgets/ConfirmDialog';
 import { USER_ROLES } from '@/features/admin/model/user';
@@ -26,6 +26,69 @@ export default function EmailUsersDialog({ open, onClose }: { open: boolean; onC
           </div>
         ) : (
           <form onSubmit={(e) => { e.preventDefault(); vm.review(); }} className="space-y-4 -mt-2">
+            <div className="flex gap-1 p-1 w-fit bg-ink-800 rounded-full" role="group" aria-label={t('email.to')}>
+              {(['groups', 'people'] as const).map((m) => (
+                <button
+                  key={m}
+                  type="button"
+                  onClick={() => vm.setMode(m)}
+                  className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-colors ${vm.mode === m ? 'bg-fg text-white' : 'text-ash hover:text-fg'}`}
+                >
+                  {t(m === 'groups' ? 'email.modeGroups' : 'email.modePeople')}
+                </button>
+              ))}
+            </div>
+
+            {vm.mode === 'people' ? (
+            <>
+            <div>
+              <label className="relative block">
+                <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-ash" />
+                <input className={`${field} pl-8`} value={vm.search} onChange={(e) => vm.setSearch(e.target.value)} placeholder={t('users.search')} />
+              </label>
+              {vm.picked.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mt-2">
+                  {vm.picked.map((u) => (
+                    <span key={u.id} className="inline-flex items-center gap-1 rounded-full bg-fg text-white text-xs font-medium pl-2.5 pr-1.5 py-1">
+                      {u.name} · {u.mobileNumber}
+                      <button type="button" onClick={() => vm.removePicked(u.id)} aria-label={t('form.remove', { name: u.name })} className="rounded-full hover:bg-white/20 p-0.5"><X size={12} /></button>
+                    </span>
+                  ))}
+                </div>
+              )}
+              <div
+                onScroll={(e) => {
+                  const el = e.currentTarget;
+                  if (el.scrollTop + el.clientHeight >= el.scrollHeight - 24) vm.loadMore();
+                }}
+                className="mt-2 h-[13.5rem] overflow-y-auto rounded-lg border border-fg/10 divide-y divide-fg/5"
+                role="group"
+                aria-label={t('email.people')}
+              >
+                {vm.found.status === 'loading' && <p className="p-3 text-xs text-ash">{t('profile.loading')}</p>}
+                {vm.found.status === 'error' && <p className="p-3 text-xs text-red-600">{t('email.peopleError')}</p>}
+                {vm.found.status === 'ready' && vm.found.items.length === 0 && <p className="p-3 text-xs text-ash">{t('users.none')}</p>}
+                {vm.found.items.map((u) => (
+                  <label key={u.id} className="flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-ink-900">
+                    <input type="checkbox" checked={vm.isPicked(u.id)} onChange={() => vm.togglePicked(u)} className="accent-[#B8922B] w-4 h-4" />
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-sm text-fg truncate">{u.name}</span>
+                      <span className="block text-xs text-ash truncate">{u.countryCode} {u.mobileNumber} · {u.email}</span>
+                    </span>
+                    <span className="text-xs text-ash-dark shrink-0">{t(`role.${u.role}`)}</span>
+                  </label>
+                ))}
+                {vm.found.loadingMore && <p className="p-3 text-xs text-ash text-center">{t('profile.loading')}</p>}
+                {vm.hasMore && !vm.found.loadingMore && (
+                  <button type="button" onClick={vm.loadMore} className="w-full p-2 text-xs font-semibold text-gold hover:underline">{t('email.loadMore')}</button>
+                )}
+              </div>
+              <p className="text-xs text-ash mt-1.5">{t('email.pickedCount', { count: vm.picked.length })}</p>
+            </div>
+
+            </>
+            ) : (
+            <>
             <div>
               <span className="block text-xs font-semibold text-ash-dark uppercase tracking-wider mb-1.5">{t('email.to')}</span>
               <div className="flex flex-wrap gap-2" role="group" aria-label={t('email.to')}>
@@ -47,6 +110,24 @@ export default function EmailUsersDialog({ open, onClose }: { open: boolean; onC
               </div>
               {vm.roles.length > 0 && vm.countsKnown && <p className="text-xs text-ash mt-1.5">{t('email.recipients', { count: vm.recipients })}</p>}
             </div>
+
+            <label className="block">
+              <span className="block text-xs font-semibold text-ash-dark uppercase tracking-wider mb-1">{t('email.range')}</span>
+              <input
+                className={field}
+                inputMode="numeric"
+                value={vm.rangeText}
+                onChange={(e) => vm.setRangeText(e.target.value)}
+                placeholder={t('email.rangePh')}
+                aria-invalid={vm.rangeUsed && !vm.range}
+              />
+              <span className="block text-xs text-ash-dark mt-1">
+                {vm.rangeUsed && !vm.range ? <span className="text-red-600">{t('email.errRange')}</span> : t('email.rangeHint')}
+              </span>
+            </label>
+
+            </>
+            )}
 
             <label className="block">
               <span className="block text-xs font-semibold text-ash-dark uppercase tracking-wider mb-1">{t('email.subject')}</span>
@@ -105,7 +186,7 @@ export default function EmailUsersDialog({ open, onClose }: { open: boolean; onC
       <ConfirmDialog
         open={vm.confirming}
         title={t('email.confirmTitle')}
-        message={t('email.confirmBody', { count: vm.recipients, subject: vm.subject.trim() })}
+        message={vm.range ? t('email.confirmBodyRange', { count: vm.recipients, subject: vm.subject.trim(), from: vm.range.from, to: vm.range.to }) : t('email.confirmBody', { count: vm.recipients, subject: vm.subject.trim() })}
         confirmLabel={vm.sending ? t('email.sending') : t('email.send')}
         busy={vm.sending}
         onCancel={vm.cancelConfirm}

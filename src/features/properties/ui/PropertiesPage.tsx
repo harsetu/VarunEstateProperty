@@ -11,13 +11,17 @@ import { t } from '@/core/utils/i18n';
 
 const PURPOSE_TABS = [
   { value: 'All', label: t('listings.all') },
-  { value: 'Sale', label: t('listings.buy') },
-  { value: 'Rent', label: t('listings.rent') },
+  { value: 'Residential', label: t('listings.residential') },
+  { value: 'Commercial', label: t('listings.commercial') },
+  { value: 'Investment', label: t('listings.investment') },
 ];
 
+const SEGMENT_CHIP = { Residential: 'listings.residential', Commercial: 'listings.commercial', Investment: 'listings.investment' } as const;
+const SEGMENT_HEADING = { Residential: 'listings.typeResidential', Commercial: 'listings.typeCommercial', Investment: 'listings.typeInvestment' } as const;
+type Segment = keyof typeof SEGMENT_CHIP;
 
 export default function Properties() {
-  const { status, error, reload, sectors, type, sector, purpose, label, sort, results, total, page, totalPages, setPage, setFilter: update, clearAll } = useListingsViewModel();
+  const { status, error, reload, sectors, type, segment, sector, label, sort, results, total, page, totalPages, setPage, setFilter: update, clearAll } = useListingsViewModel();
 
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
@@ -27,14 +31,14 @@ export default function Properties() {
   }, []);
 
   const activeChips = [
-    purpose !== 'All' && { label: purpose === 'Sale' ? t('listings.forSale') : t('listings.forRent'), clear: () => update('purpose', 'All', 'All') },
+    segment !== 'All' && { label: t(SEGMENT_CHIP[segment as Segment]), clear: () => update('segment', 'All', 'All') },
     type !== 'All' && { label: type, clear: () => update('type', 'All', 'All') },
     sector !== 'All' && { label: sector, clear: () => update('sector', 'All', 'All') },
     label !== 'All' && { label: t(`label.${label as Label}`), clear: () => update('label', 'All', 'All') },
   ].filter(Boolean) as { label: string; clear: () => void }[];
 
   const typeLabel = type === 'All' ? t('listings.typeAll') : type === 'Commercial' ? t('listings.typeCommercial') : t('listings.typePlural', { type });
-  const heading = t(purpose === 'Rent' ? 'listings.headingRent' : purpose === 'Sale' ? 'listings.headingSale' : 'listings.heading', { type: typeLabel });
+  const heading = t('listings.heading', { type: type === 'All' && segment !== 'All' ? t(SEGMENT_HEADING[segment as Segment]) : typeLabel });
 
   // Slot a "can't find it?" card into the grid
   const ctaAt = Math.min(4, results.length);
@@ -58,14 +62,14 @@ export default function Properties() {
       <div className={`sticky top-[72px] z-40 transition-[background,box-shadow] duration-300 ${scrolled ? 'bg-ink-900/90 backdrop-blur-xl shadow-[0_1px_0_rgba(22,23,27,0.08)]' : ''}`}>
         <div className="max-w-[1280px] mx-auto px-5 lg:px-8 py-2">
           <div className="flex items-center gap-2 overflow-x-auto -mx-5 px-5 lg:mx-0 lg:px-0 lg:overflow-visible lg:flex-wrap [scrollbar-width:none] [&>*]:shrink-0">
-            {/* Buy / Rent */}
+            {/* All / Residential / Commercial / Investment */}
             <div className="flex p-0.5 bg-white rounded-full shadow-card">
               {PURPOSE_TABS.map((tab) => (
                 <button
                   key={tab.value}
-                  onClick={() => update('purpose', tab.value, 'All')}
+                  onClick={() => update('segment', tab.value, 'All')}
                   className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
-                    purpose === tab.value ? 'bg-fg text-white' : 'text-ash hover:text-fg'
+                    segment === tab.value ? 'bg-fg text-white' : 'text-ash hover:text-fg'
                   }`}
                 >
                   {tab.label}
@@ -73,7 +77,8 @@ export default function Properties() {
               ))}
             </div>
 
-            {/* Type */}
+            {/* Type (Residential / All only) */}
+            {segment !== 'Commercial' && (
             <label className="flex items-center gap-1.5 bg-white rounded-full shadow-card pl-3 pr-2 py-1 text-xs">
               <LayoutGrid size={13} className="text-gold" />
               <select
@@ -82,9 +87,10 @@ export default function Properties() {
                 className="bg-transparent font-medium text-fg focus:outline-none cursor-pointer"
                 aria-label={t('listings.allTypes')}
               >
-                {TYPES.map((opt) => <option key={opt} value={opt}>{opt === 'All' ? t('listings.allTypes') : opt}</option>)}
+                {TYPES.filter((opt) => segment === 'Investment' || opt !== 'Commercial').map((opt) => <option key={opt} value={opt}>{opt === 'All' ? t('listings.allTypes') : opt}</option>)}
               </select>
             </label>
+            )}
 
             {/* Sector */}
             <label className="flex items-center gap-1.5 bg-white rounded-full shadow-card pl-3 pr-2 py-1 text-xs">

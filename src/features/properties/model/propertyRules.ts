@@ -58,8 +58,9 @@ export const startingPrice = (list: Property[]) => {
 };
 
 /** Filter, sort and slice a full list into one page (used when the server can't do it). */
-export const pageOf = (list: Property[], { purpose, type, sector, label, sort, page, size }: PropertyQuery): PropertyPage => {
-  const matches = sortProperties(filterProperties(list, { purpose, type, sector, label }), sort);
+export const pageOf = (list: Property[], { purpose, type, segment, sector, label, sort, page, size }: PropertyQuery): PropertyPage => {
+  const inSegment = segment === 'Investment' ? (p: Property) => !!p.labels?.includes('NEW_LAUNCH') : segment === 'Commercial' ? (p: Property) => p.type === 'Commercial' : segment === 'Residential' ? (p: Property) => p.type !== 'Commercial' : () => true;
+  const matches = sortProperties(filterProperties(list, { purpose, type, sector, label }).filter(inSegment), sort);
   const totalPages = Math.max(1, Math.ceil(matches.length / size));
   const current = Math.min(Math.max(1, page), totalPages);
   return { items: matches.slice((current - 1) * size, current * size), total: matches.length, page: current, totalPages };

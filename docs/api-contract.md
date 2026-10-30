@@ -41,6 +41,14 @@ Any 2xx counts as sent; otherwise the response's `message` is shown under the fo
 The server emails every user holding one of the roles and returns 2xx once the mail is queued.
 The compose dialog shows recipient counts using `GET /api/users?role=X&size=1` (`totalElements`).
 
+Optional `range` — `{ "from": 1, "to": 100 }`: email only those positions (inclusive, 1-based) among the chosen roles,
+ordered by user id ascending (oldest first). Omitted = everyone. `recipients` in the response counts only the users in the range.
+See `docs/backend-email-range-prompt.md` for the full backend spec.
+
+Optional `userIds` — `[12, 15, 98]`: email exactly those users instead of groups (the client then omits `roles` and `range`).
+Unknown or email-less ids are skipped; `recipients` counts only the mails queued.
+See `docs/backend-email-users-prompt.md` for the full backend spec.
+
 Optional mail extras (sent only when used): `images` — array of image URLs shown in the body;
 `attachments` — array of `{ name, url, contentType }`. Files are uploaded first: images to `POST /api/images`,
 PDF/Word to `POST /api/files` (multipart `file`, response `{ url }`).

@@ -7,11 +7,13 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   subtitle?: string;
+  /** 'sheet' is a large panel docked to the bottom of the screen (used for video). */
+  size?: 'default' | 'sheet';
   children: React.ReactNode;
 }
 
 // Centered dialog on desktop, bottom sheet on mobile. Esc / backdrop closes it.
-export default function Modal({ open, onClose, title, subtitle, children }: ModalProps) {
+export default function Modal({ open, onClose, title, subtitle, size = 'default', children }: ModalProps) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
@@ -27,9 +29,9 @@ export default function Modal({ open, onClose, title, subtitle, children }: Moda
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[7000] flex items-end sm:items-center justify-center" role="dialog" aria-modal="true" aria-label={title}>
+    <div className={`fixed inset-0 z-[7000] flex items-end justify-center ${size === 'sheet' ? '' : 'sm:items-center'}`} role="dialog" aria-modal="true" aria-label={title}>
       <div className="absolute inset-0 bg-night/60 backdrop-blur-sm animate-[modalFade_0.2s_ease-out]" onClick={onClose} />
-      <div className="relative w-full sm:max-w-md max-h-[92vh] overflow-y-auto bg-white rounded-t-3xl sm:rounded-3xl shadow-card-hover p-6 sm:p-8 animate-[modalUp_0.3s_cubic-bezier(0.22,1,0.36,1)]">
+      <div className={`relative w-full ${size === 'sheet' ? 'sm:max-w-5xl max-h-[96vh] rounded-t-3xl p-4 sm:p-6' : 'sm:max-w-md max-h-[92vh] rounded-t-3xl sm:rounded-3xl p-6 sm:p-8'} overflow-y-auto bg-white shadow-card-hover animate-[modalUp_0.3s_cubic-bezier(0.22,1,0.36,1)]`}>
         <button onClick={onClose} aria-label={t('common.close')} className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center text-ash hover:bg-ink-800 hover:text-fg transition-colors">
           <X size={18} />
         </button>

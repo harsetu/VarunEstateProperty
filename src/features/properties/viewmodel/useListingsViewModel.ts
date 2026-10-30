@@ -26,7 +26,9 @@ export function useListingsViewModel() {
     const v = params.get(key);
     return v && options.includes(v) ? v : fallback;
   };
-  const type = pick('type', TYPES, 'All');
+  const segment = pick('segment', ['Residential', 'Commercial', 'Investment'], 'All');
+  // Commercial has no sub-types, so any type in the URL is ignored there
+  const type = segment === 'Commercial' ? 'All' : pick('type', TYPES, 'All');
   const sector = params.get('sector') || 'All';
   const purpose = pick('purpose', PURPOSES, 'All');
   const label = pick('label', LABELS, 'All');
@@ -43,13 +45,13 @@ export function useListingsViewModel() {
     let cancelled = false;
     setState((s) => ({ ...s, status: 'loading', error: undefined }));
     propertyRepository
-      .search({ purpose, type, sector, label, sort, page: requestedPage, size: PAGE_SIZE })
+      .search({ purpose, type, segment, sector, label, sort, page: requestedPage, size: PAGE_SIZE })
       .then((r) => !cancelled && setState({ status: 'ready', results: { items: r.items, total: r.total, totalPages: r.totalPages } }))
       .catch((e: unknown) =>
         !cancelled && setState((s) => ({ ...s, status: 'error', error: e instanceof Error ? e.message : t('error.generic') })),
       );
     return () => { cancelled = true; };
-  }, [purpose, type, sector, label, sort, requestedPage, attempt]);
+  }, [purpose, type, segment, sector, label, sort, requestedPage, attempt]);
 
   const setFilter = (key: string, value: string, fallback: string) => {
     const next = new URLSearchParams(params);
@@ -71,7 +73,7 @@ export function useListingsViewModel() {
   const { items, total, totalPages } = state.results;
   return {
     status: state.status, error: state.error, reload,
-    sectors: ['All', ...sectors], type, sector, purpose, label, sort,
+    sectors: ['All', ...sectors], type, segment, sector, purpose, label, sort,
     results: items, total, page: Math.min(requestedPage, totalPages), totalPages,
     setFilter, setPage, clearAll,
   };
