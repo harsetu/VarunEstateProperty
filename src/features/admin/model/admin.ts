@@ -15,7 +15,9 @@ export interface RecentProperty {
   propertyCategory: string;
   location: string;
   city: string;
-  price: number;
+  price: number | null;
+  /** Upper end of a tentative range; null for a fixed price. */
+  priceMax?: number | null;
   currency: string;
   areaValue: number;
   areaUnit: string;

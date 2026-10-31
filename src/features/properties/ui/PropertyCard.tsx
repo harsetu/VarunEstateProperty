@@ -1,17 +1,32 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Bed, Bath, Maximize, MapPin, ArrowRight } from 'lucide-react';
 import type { Property } from '@/features/properties/model/property';
 import ScrollReveal from '@/core/widgets/ScrollReveal';
 import TiltCard from '@/core/widgets/TiltCard';
 import { t } from '@/core/utils/i18n';
+import { isPriceRange } from '@/core/utils/pricing';
 import flavor from '@/flavors';
 import { images } from '@/res';
+import ImageLightbox from '@/core/widgets/ImageLightbox';
+import { usePropertyPhotos } from '@/features/properties/viewmodel/usePropertyPhotos';
+
+const SLIDE_MS = 3500;
 
 export default function PropertyCard({ property, index = 0 }: { property: Property; index?: number }) {
   // Moving across the photo flips through the gallery, no clicks needed
   const [photo, setPhoto] = useState(0);
-  const photos = property.images.length ? property.images.slice(0, 5) : [images.placeholder];
+  const [hovering, setHovering] = useState(false);
+  const [zoom, setZoom] = useState<number | null>(null);
+  const { ref, photos: all } = usePropertyPhotos<HTMLDivElement>(property.id, property.images);
+  const photos = all.length ? all.slice(0, 6) : [images.placeholder];
+
+  // Flip through the gallery on its own, unless the pointer is on the photo
+  useEffect(() => {
+    if (photos.length < 2 || hovering || zoom !== null || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const id = setInterval(() => setPhoto((i) => (i + 1) % photos.length), SLIDE_MS);
+    return () => clearInterval(id);
+  }, [photos.length, hovering, zoom]);
   const scrub = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.pointerType !== 'mouse' || photos.length < 2) return;
     const r = e.currentTarget.getBoundingClientRect();
@@ -27,9 +42,12 @@ export default function PropertyCard({ property, index = 0 }: { property: Proper
         >
           <div className="relative p-2 pb-0 [transform:translateZ(30px)]">
             <div
+              ref={ref}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); setZoom(photo); }}
               onPointerMove={scrub}
-              onPointerLeave={() => setPhoto(0)}
-              className="relative aspect-[4/3] overflow-hidden rounded-xl shadow-[0_12px_24px_-10px_rgba(22,23,27,0.35)]"
+              onPointerEnter={() => setHovering(true)}
+              onPointerLeave={() => setHovering(false)}
+              className="relative aspect-[4/3] overflow-hidden rounded-xl cursor-zoom-in shadow-[0_12px_24px_-10px_rgba(22,23,27,0.35)]"
             >
               {photos.map((src, i) => (
                 <img
@@ -43,7 +61,7 @@ export default function PropertyCard({ property, index = 0 }: { property: Proper
                 />
               ))}
               {photos.length > 1 && (
-                <div className="absolute bottom-2.5 inset-x-0 flex justify-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="absolute bottom-2.5 inset-x-0 flex justify-center gap-1.5">
                   {photos.map((src, i) => (
                     <span key={src} className={`h-1 rounded-full transition-all ${i === photo ? 'w-5 bg-white' : 'w-1.5 bg-white/60'}`} />
                   ))}
@@ -77,7 +95,10 @@ export default function PropertyCard({ property, index = 0 }: { property: Proper
             </div>
 
             <div className="mt-auto flex items-center justify-between [transform:translateZ(15px)]">
-              <span className="font-display font-semibold text-fg text-2xl">{property.price}</span>
+              <span className="min-w-0">
+                {isPriceRange(property.priceValue, property.priceMax) && <span className="block mb-1"><span className="px-2 py-0.5 rounded-full bg-gold/10 text-gold text-[0.6875rem] font-semibold uppercase tracking-wide">{t('price.approx')}</span></span>}
+                <span className={`block font-display font-semibold text-fg ${isPriceRange(property.priceValue, property.priceMax) ? 'text-lg' : 'text-2xl'}`}>{property.price}</span>
+              </span>
               <span className="flex items-center gap-1 text-sm font-semibold text-gold">
                 {t('card.viewDetails')} <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
               </span>
@@ -85,6 +106,7 @@ export default function PropertyCard({ property, index = 0 }: { property: Proper
           </div>
         </Link>
       </TiltCard>
+      {zoom !== null && <ImageLightbox images={all.length ? all : photos} index={zoom} alt={property.title} onChange={setZoom} onClose={() => setZoom(null)} />}
     </ScrollReveal>
   );
 }

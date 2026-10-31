@@ -41,7 +41,7 @@ export default function SectorMap() {
             <div className="relative lg:py-4 lg:px-6 [perspective:1600px]">
               <div
                 style={{ gridTemplateColumns: `repeat(${COLUMNS}, minmax(0, 1fr))` }}
-                className="iso-map grid gap-2 sm:gap-3 p-3 sm:p-4 rounded-[1.75rem] bg-[#E9E3D6] shadow-card-3d">
+                className="iso-map grid gap-2 sm:gap-3 p-3 sm:p-4 rounded-[1.75rem] bg-ink-600 shadow-card-3d">
                 {sectors.map((name) => {
                   const count = bySector.get(name)?.length ?? 0;
                   const isActive = active === name;
@@ -158,7 +158,7 @@ export default function SectorMap() {
           }
           .iso-tile { transform-style: preserve-3d; box-shadow: 0 1px 0 rgba(22,23,27,0.08); }
           .iso-lift:hover { transform: translateZ(10px); box-shadow: 0 10px 0 -2px rgba(22,23,27,0.12); }
-          .iso-raised { transform: translateZ(22px); box-shadow: 0 22px 0 -4px #8F6B10, 0 30px 30px -10px rgba(22,23,27,0.35); }
+          .iso-raised { transform: translateZ(22px); box-shadow: 0 22px 0 -4px rgb(var(--c-gold-dark)), 0 30px 30px -10px rgb(var(--c-fg) / 0.35); }
           .iso-pin { transform: translateZ(14px); }
         }
       `}</style>

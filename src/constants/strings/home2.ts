@@ -1,4 +1,4 @@
-// Home page: categories and "find your fit".
+// Home page: categories.
 export const home2 = {
   'categories.eyebrow': 'Browse by type',
   'categories.title': 'What are you <em>looking for?</em>',
@@ -7,32 +7,6 @@ export const home2 = {
   'categories.from': 'from {price}',
   'categories.explore': 'Explore',
 
-  'fit.eyebrow': 'Find your fit',
-  'fit.title': "Tell us who you are. <em>We'll do the rest.</em>",
-  'fit.family.label': 'Growing family',
-  'fit.family.headline': 'Space to grow, schools nearby, neighbours you’ll like.',
-  'fit.family.p1': '3+ bedroom homes in settled sectors',
-  'fit.family.p2': 'Schools, parks & hospitals within minutes',
-  'fit.family.p3': 'Plots and floors with private parking',
-  'fit.family.cta': 'See family homes',
-  'fit.investor.label': 'Investor',
-  'fit.investor.headline': 'Assets that appreciate — and pay you while they do.',
-  'fit.investor.p1': 'Plots and SCOs on high-growth corridors',
-  'fit.investor.p2': 'Rental yield and resale guidance',
-  'fit.investor.p3': 'Clear titles, no legal surprises',
-  'fit.investor.cta': 'See investment picks',
-  'fit.nri.label': 'NRI buyer',
-  'fit.nri.headline': 'Buy in {market} without flying in for every step.',
-  'fit.nri.p1': 'Live video-call site tours',
-  'fit.nri.p2': 'Power-of-attorney & paperwork handled',
-  'fit.nri.p3': 'Updates on WhatsApp in your time zone',
-  'fit.nri.cta': 'Talk to our NRI desk',
-  'fit.first.label': 'First home',
-  'fit.first.headline': 'Your first set of keys, without the stress.',
-  'fit.first.p1': 'Homes under ₹1 Cr in good sectors',
-  'fit.first.p2': 'Home-loan assistance with top banks',
-  'fit.first.p3': 'Honest advice — no pushy sales',
-  'fit.first.cta': 'See homes under ₹1 Cr',
 
   'projects.stageLaunch': 'Launch',
   'projects.stageConstruction': 'Construction',

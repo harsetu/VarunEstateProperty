@@ -10,6 +10,7 @@ import CallbackPopup from '@/core/layout/CallbackPopup';
 import Home from '@/features/home/ui/HomePage';
 import Properties from '@/features/properties/ui/PropertiesPage';
 import PropertyDetail from '@/features/properties/ui/PropertyDetailPage';
+import Investment from '@/features/properties/ui/InvestmentPage';
 import About from '@/features/about/ui/AboutPage';
 import Contact from '@/features/contact/ui/ContactPage';
 import { t } from '@/core/utils/i18n';
@@ -24,7 +25,9 @@ import AdminHome from '@/features/admin/ui/AdminHome';
 import AdminPublish from '@/features/admin/ui/AdminPublish';
 import AdminUsers from '@/features/admin/ui/AdminUsers';
 import AdminReviews from '@/features/admin/ui/AdminReviews';
+import AdminSettings from '@/features/admin/ui/AdminSettings';
 import AdminProfile from '@/features/admin/ui/AdminProfile';
+import ThemeProvider from '@/core/theme/ThemeProvider';
 import { analytics } from '@/core/analytics/analytics';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -47,6 +50,7 @@ function PageTransition() {
         <Route path="/" element={<Home />} />
         <Route path="/properties" element={<Properties />} />
         <Route path="/properties/:id" element={<PropertyDetail />} />
+        <Route path="/investment" element={<Investment />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="*" element={<Home />} />
@@ -70,6 +74,7 @@ function SiteShell() {
           <Route path="/admin/reviews" element={<AdminReviews />} />
           <Route path="/admin/users" element={<AdminUsers />} />
           <Route path="/admin/profile" element={<AdminProfile />} />
+          <Route path="/admin/settings" element={<AdminSettings />} />
         </Route>
         <Route path="/admin/*" element={<AdminLogin />} />
       </Routes>
@@ -99,11 +104,13 @@ function App() {
 
   return (
     <BrowserRouter>
-      <CatalogProvider>
-        <AdminAuthProvider>
-          <SiteShell />
-        </AdminAuthProvider>
-      </CatalogProvider>
+      <ThemeProvider>
+        <CatalogProvider>
+          <AdminAuthProvider>
+            <SiteShell />
+          </AdminAuthProvider>
+        </CatalogProvider>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }

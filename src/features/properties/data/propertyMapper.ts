@@ -1,5 +1,5 @@
 import type { FloorAvailability, Furnishing, Label, ListingStatus, NearbyCategory, NearbyPlace, Property, PropertyExtras, PropertyType, Purpose } from '@/features/properties/model/property';
-import { formatINR } from '@/core/utils/pricing';
+import { formatPriceRange } from '@/core/utils/pricing';
 import { t } from '@/core/utils/i18n';
 import { buildMapEmbedUrl } from '@/core/utils/contactLinks';
 
@@ -15,6 +15,7 @@ export interface PropertySummaryDto {
   location: string;
   city?: string | null;
   price?: number | null;
+  priceMax?: number | null;
   hidePrice?: boolean;
   labels?: Label[] | null;
   currency?: string;
@@ -98,8 +99,9 @@ const base = (d: PropertySummaryDto): Omit<Property, 'images' | 'mapEmbed' | 'de
   type: CATEGORY_TO_TYPE[d.propertyCategory ?? 'OTHER'] ?? 'Flat',
   purpose: (d.listingType === 'RENT' ? 'Rent' : 'Sale') as Purpose,
   sector: d.location,
-  price: d.price == null || d.hidePrice ? t('price.onRequest') : formatINR(d.price),
+  price: d.price == null || d.hidePrice ? t('price.onRequest') : formatPriceRange(d.price, d.priceMax, d.currency) + (d.listingType === 'RENT' ? t('price.perMonth') : ''),
   priceValue: d.price ?? 0,
+  priceMax: d.price == null || d.hidePrice ? undefined : d.priceMax ?? undefined,
   area: formatArea(d.areaValue, d.areaUnit),
   bedrooms: d.bedrooms ?? undefined,
   bathrooms: d.bathrooms ?? undefined,
@@ -171,6 +173,7 @@ export const toCreateRequest = (p: Property, city: string) => {
     latitude: p.latitude ?? null,
     longitude: p.longitude ?? null,
     price: p.priceValue,
+    priceMax: p.priceMax != null && p.priceMax > 0 ? p.priceMax : null,
     currency: 'INR',
     priceNegotiable: Boolean(p.priceNegotiable),
     hidePrice: Boolean(p.hidePrice),

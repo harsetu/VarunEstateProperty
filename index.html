@@ -2,9 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/logo1.jpg?v=5" />
+    <link rel="icon" href="/logo.jpg?v=6" />
     <meta name="theme-color" content="#16171B" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // Set the cached theme before first paint so the page doesn't flash the default colours
+      try {
+        var th = localStorage.getItem('site-theme');
+        if (/^THEME[123]$/.test(th) && location.pathname.indexOf('/admin') !== 0) document.documentElement.setAttribute('data-theme', th);
+      } catch (e) {}
+    </script>
     <title>Pahwa Real Estate — Premium Real Estate in Panchkula | Kothis, Plots, Flats & Commercial</title>
     <meta name="description" content="Pahwa Real Estate is Panchkula's most trusted real estate firm. Premium kothis, plots, builder floors, flats, and commercial properties in Sectors 4, 7, 11, 20 & MDC." />
     <meta name="keywords" content="Pahwa Real Estate, Panchkula real estate, kothis Panchkula, plots Panchkula, builder floors, flats Panchkula, commercial property Haryana" />

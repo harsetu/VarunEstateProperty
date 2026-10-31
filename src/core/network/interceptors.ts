@@ -1,5 +1,5 @@
 import { adminSession } from '@/core/network/session';
-import { errorMessage, HttpError, toSession, type TokenResponse } from '@/core/network/tokens';
+import { errorDetails, HttpError, toSession, type TokenResponse } from '@/core/network/tokens';
 import { t } from '@/core/utils/i18n';
 import type { RequestInterceptor, ResponseInterceptor } from '@/core/network/httpClient';
 
@@ -68,6 +68,9 @@ export const refreshOn401 = (apiRoot: string): ResponseInterceptor => async (res
 
 /** Turns any non-2xx response into an Error carrying the server's message. */
 export const throwOnError: ResponseInterceptor = async (res) => {
-  if (!res.ok) throw new HttpError(await errorMessage(res, t('api.requestFailed', { status: res.status })), res.status);
+  if (!res.ok) {
+    const { message, code } = await errorDetails(res, t('api.requestFailed', { status: res.status }));
+    throw new HttpError(message, res.status, code);
+  }
   return res;
 };

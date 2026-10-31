@@ -5,7 +5,7 @@ export const LISTING_STATUSES = ['DRAFT', 'ACTIVE', 'SOLD', 'RENTED', 'INACTIVE'
 export type ListingStatus = (typeof LISTING_STATUSES)[number];
 export const FURNISHINGS = ['UNFURNISHED', 'SEMI_FURNISHED', 'FURNISHED'] as const;
 export type Furnishing = (typeof FURNISHINGS)[number];
-export const LABELS = ['FEATURED', 'NEW', 'DISTRESS', 'NEW_LAUNCH', 'OLD'] as const;
+export const LABELS = ['FEATURED', 'NEW_LAUNCH', 'UPCOMING', 'RESALE', 'EXCLUSIVE'] as const;
 export type Label = (typeof LABELS)[number];
 export const FLOOR_AVAILABILITY = ['SINGLE', 'MULTIPLE', 'ALL'] as const;
 export type FloorAvailability = (typeof FLOOR_AVAILABILITY)[number];
@@ -50,8 +50,12 @@ export interface Property extends PropertyExtras {
   type: PropertyType;
   purpose: Purpose;
   sector: string;
+  /** Display text, already formatted (a range when `priceMax` is set). */
   price: string;
+  /** Lower end of the price (the fixed price when there is no `priceMax`). */
   priceValue: number;
+  /** Upper end of a tentative range; absent for a fixed price. */
+  priceMax?: number;
   area: string;
   bedrooms?: number;
   bathrooms?: number;
@@ -89,5 +93,7 @@ export interface NewProject {
   sizeRange: string;
   startingPrice: string;
   image: string;
+  /** Extra photos; when more than one, the card shows a pager and auto-scrolls. */
+  images?: string[];
   highlights: string[];
 }

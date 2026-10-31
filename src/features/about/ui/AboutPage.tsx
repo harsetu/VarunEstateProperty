@@ -1,11 +1,13 @@
 import { t } from '@/core/utils/i18n';
+import { rich } from '@/core/utils/rich';
+
+const HL = 'not-italic font-semibold text-fg bg-gold/15 rounded px-1 py-0.5 [box-decoration-break:clone] [-webkit-box-decoration-break:clone]';
 import { Link } from 'react-router-dom';
 import ScrollReveal from '@/core/widgets/ScrollReveal';
 import { useAboutViewModel } from '@/features/about/viewmodel/useAboutViewModel';
-import Counter from '@/core/widgets/Counter';
 
 export default function About() {
-  const { stats: STATS, company, market, owner } = useAboutViewModel();
+  const { company, market, owner } = useAboutViewModel();
 
   return (
     <div className="min-h-screen bg-ink-900 pt-28">
@@ -13,38 +15,14 @@ export default function About() {
         <ScrollReveal>
           <p className="text-gold text-sm font-semibold uppercase tracking-[0.18em] mb-4">{t('about.eyebrow')}</p>
           <h1 className="font-display font-semibold text-fg text-[clamp(2.25rem,6vw,4.5rem)] tracking-tight">
-            {t('about.title')} <span className="italic gold-gradient-text">{t('about.titleEm')}</span>
+            {t('about.title')} <span className="italic gold-gradient-text">{company} Real Estate</span>
           </h1>
+          <p className="text-ash text-lg lg:text-xl max-w-2xl mx-auto mt-6">{rich('about.tagline', undefined, HL)}</p>
         </ScrollReveal>
       </section>
 
-      <section className="py-24 lg:py-32 px-6 lg:px-12">
-        <div className="max-w-4xl mx-auto">
-          <ScrollReveal>
-            <h2 className="font-display font-bold text-fg text-3xl lg:text-5xl tracking-tight mb-8">
-              {t('about.legacy')} <span className="gold-gradient-text">{t('about.legacyEm')}</span>
-            </h2>
-          </ScrollReveal>
-          <ScrollReveal delay={0.1}>
-            <p className="text-ash text-lg leading-relaxed mb-6">
-              {t('about.p1', { company, market })}
-            </p>
-          </ScrollReveal>
-          <ScrollReveal delay={0.15}>
-            <p className="text-ash text-lg leading-relaxed mb-6">
-              {t('about.p2')}
-            </p>
-          </ScrollReveal>
-          <ScrollReveal delay={0.2}>
-            <p className="text-ash text-lg leading-relaxed">
-              {t('about.p3', { market })}
-            </p>
-          </ScrollReveal>
-        </div>
-      </section>
-
       {owner && (
-        <section className="py-20 px-6 lg:px-12 bg-ink-800">
+        <section className="pb-20 pt-2 px-6 lg:px-12 bg-ink-800">
           <ScrollReveal>
             <div className="max-w-4xl mx-auto grid sm:grid-cols-[minmax(0,260px)_1fr] gap-8 sm:gap-12 items-center">
               <img
@@ -62,6 +40,26 @@ export default function About() {
         </section>
       )}
 
+      <section className="py-24 lg:py-32 px-6 lg:px-12">
+        <div className="max-w-4xl mx-auto">
+          <ScrollReveal delay={0.1}>
+            <p className="text-ash text-lg leading-relaxed mb-6">
+              {rich('about.p1', { company, market }, HL)}
+            </p>
+          </ScrollReveal>
+          <ScrollReveal delay={0.15}>
+            <p className="text-ash text-lg leading-relaxed mb-6">
+              {rich('about.p2', undefined, HL)}
+            </p>
+          </ScrollReveal>
+          <ScrollReveal delay={0.2}>
+            <p className="text-ash text-lg leading-relaxed">
+              {rich('about.p3', { market }, HL)}
+            </p>
+          </ScrollReveal>
+        </div>
+      </section>
+
       <section className="py-24 bg-ink-800 px-6 lg:px-12">
         <div className="max-w-[1400px] mx-auto">
           <ScrollReveal>
@@ -69,12 +67,8 @@ export default function About() {
               {t('about.values')} <span className="gold-gradient-text">{t('about.valuesEm')}</span>
             </h2>
           </ScrollReveal>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { title: t('about.v1.title'), desc: t('about.v1.desc') },
-              { title: t('about.v2.title'), desc: t('about.v2.desc') },
-              { title: t('about.v3.title'), desc: t('about.v3.desc') },
-            ].map((value, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3, 4, 5].map((n) => ({ title: t(`about.v${n}.title`), desc: t(`about.v${n}.desc`, { market }) })).map((value, i) => (
               <ScrollReveal key={i} delay={i * 0.1}>
                 <div className="bg-ink-700 border border-fg/8 p-8 h-full">
                   <div className="font-display font-semibold text-gold text-5xl mb-4">0{i + 1}</div>
@@ -87,20 +81,16 @@ export default function About() {
         </div>
       </section>
 
-      <section className="py-24 lg:py-32 bg-ink-900 px-6">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-4">
-            {STATS.map((stat, i) => (
-              <Counter key={i} value={stat.value} suffix={stat.suffix} label={stat.label} index={i} />
-            ))}
-          </div>
-        </div>
+      <section className="py-20 px-6 lg:px-12 bg-ink-900">
+        <ScrollReveal>
+          <p className="max-w-3xl mx-auto text-center font-display text-fg text-2xl lg:text-3xl leading-snug">{rich('about.belief', { company }, 'not-italic text-gold')}</p>
+        </ScrollReveal>
       </section>
 
       <section className="py-24 lg:py-32 bg-ink-800 px-6 text-center">
         <ScrollReveal>
           <h2 className="font-display font-semibold text-fg text-[clamp(1.875rem,4.5vw,3.75rem)] tracking-tight mb-8">
-            {t('about.ready')} <span className="gold-gradient-text">{t('about.readyEm')}</span>
+            {t('about.ready', { company })} <span className="gold-gradient-text">{t('about.readyEm')}</span>
           </h2>
           <Link to="/contact" className="neopop-btn">{t('about.getInTouch')}</Link>
         </ScrollReveal>

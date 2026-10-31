@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import type { Property, PropertyType, Purpose } from '@/features/properties/model/property';
 import { effectiveAvailability, fieldRules, sanitize } from '@/features/admin/model/formRules';
 import type { GeoPlace } from '@/features/admin/model/place';
-import { formatINR } from '@/core/utils/pricing';
+import { formatPriceRange } from '@/core/utils/pricing';
+import { HttpError } from '@/core/network/tokens';
 import { buildMapEmbedUrl } from '@/core/utils/contactLinks';
 import { listingAdmin, propertyRepository } from '@/app/container';
 import flavor from '@/flavors';
@@ -34,10 +35,16 @@ const blankProperty = (): Property => ({
   labels: [],
 });
 
+/** Set when a max price is entered below the min price. */
+export const priceMaxError = (p: Property) => p.priceMax != null && p.priceMax < p.priceValue;
+
+const shownPrice = (p: Property) => (p.priceValue > 0 ? formatPriceRange(p.priceValue, p.priceMax) : '');
+
 const validate = (p: Property) => {
   if (!p.title.trim()) return t('form.errTitle');
   if (!p.sector.trim()) return t('form.errSector');
   // if (!(p.priceValue > 0)) return t('form.errPrice');
+  if (priceMaxError(p)) return t('form.errPriceMax');
   if (fieldRules(p.type, p.purpose).floors && effectiveAvailability(p) === 'MULTIPLE' && !p.availableFloors?.length) return t('form.errFloors');
   if (p.images.length === 0) return t('form.errImages');
   return null;
@@ -50,6 +57,8 @@ export function usePropertyEditorViewModel(routeId?: string) {
   const [draft, setDraft] = useState<Property | null>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<Message | null>(null);
+  // the server's INVALID_PRICE_RANGE, shown under the max price until it is edited
+  const [serverPriceError, setServerPriceError] = useState(false);
 
   // Edit loads the full record (the catalog only has list summaries)
   const [original, setOriginal] = useState<Property | undefined>();
@@ -81,10 +90,12 @@ export function usePropertyEditorViewModel(routeId?: string) {
   const run = async (action: () => Promise<void>, okText?: string) => {
     setBusy(true);
     setMessage(null);
+    setServerPriceError(false);
     try {
       await action();
       if (okText) setMessage({ kind: 'ok', text: okText });
     } catch (e) {
+      if (e instanceof HttpError && e.code === 'INVALID_PRICE_RANGE') setServerPriceError(true);
       setMessage({ kind: 'error', text: e instanceof Error ? e.message : t('error.generic') });
     } finally {
       setBusy(false);
@@ -94,10 +105,11 @@ export function usePropertyEditorViewModel(routeId?: string) {
   const setField = <K extends keyof Property>(key: K, value: Property[K]) =>
     setDraft((d) => {
       if (!d) return d;
+      if (key === 'priceValue' || key === 'priceMax') setServerPriceError(false);
       const next = { ...d, [key]: value };
       // Keep the display price in step with the number unless it was typed by hand
-      if (key === 'priceValue' && (!d.price || d.price === formatINR(d.priceValue))) {
-        next.price = (value as number) > 0 ? formatINR(value as number) : '';
+      if ((key === 'priceValue' || key === 'priceMax') && (!d.price || d.price === shownPrice(d))) {
+        next.price = shownPrice(next);
       }
       return next;
     });
@@ -151,7 +163,7 @@ export function usePropertyEditorViewModel(routeId?: string) {
       ...sanitize(draft),
       title: draft.title.trim(),
       sector: draft.sector.trim(),
-      price: draft.price.trim() || formatINR(draft.priceValue),
+      price: draft.price.trim() || shownPrice(draft),
       mapEmbed: draft.mapEmbed.trim() || buildMapEmbedUrl(`${draft.title}, ${draft.sector}, ${flavor.market}`),
       videoUrl: draft.videoUrl?.trim() || undefined,
     };
@@ -179,6 +191,7 @@ export function usePropertyEditorViewModel(routeId?: string) {
 
   return {
     status, notFound, draft, isNew, dirty, busy, message,
+    priceMaxError: draft && (priceMaxError(draft) || serverPriceError) ? t('form.errPriceMax') : undefined,
     setField, pickLocation, clearLocation, addImageUrl, removeImage, moveImage, makeCover, uploadImages,
     addAmenity, removeAmenity, save, remove, close, canEdit: Boolean(listingAdmin),
     types: flavor.content.types.filter((t) => t !== 'All'),

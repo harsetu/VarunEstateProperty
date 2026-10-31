@@ -182,7 +182,7 @@ export default function Hero() {
                   <span
                     key={a}
                     className="w-9 h-9 rounded-full border-2 border-ink-900 flex items-center justify-center text-[0.6875rem] font-bold text-white"
-                    style={{ background: ['#B8922B', '#16171B', '#8F6B10', '#555963'][i] }}
+                    style={{ background: ['rgb(var(--c-gold))', 'rgb(var(--c-fg))', 'rgb(var(--c-gold-dark))', 'rgb(var(--c-ash))'][i] }}
                   >
                     {a}
                   </span>

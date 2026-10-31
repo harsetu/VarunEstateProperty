@@ -3,6 +3,7 @@ export const layout = {
   'meta.title': '{company} — Premium Real Estate in {market}',
   'nav.home': 'Home',
   'nav.properties': 'Properties',
+  'nav.investment': 'Investment',
   'nav.about': 'About',
   'nav.aboutUs': 'About Us',
   'nav.contact': 'Contact',

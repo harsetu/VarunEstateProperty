@@ -4,31 +4,33 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Light theme: "ink" are the surfaces (900 = page background)
+        // Every colour comes from a CSS variable (RGB channels) so themes can swap them; see src/index.css.
+        // "ink" are the surfaces (900 = page background)
         ink: {
-          900: '#FAF8F4',
-          800: '#F3EFE7',
-          700: '#FFFFFF',
-          600: '#ECE7DD',
-          500: '#E2DCD0',
+          900: 'rgb(var(--c-ink-900) / <alpha-value>)',
+          800: 'rgb(var(--c-ink-800) / <alpha-value>)',
+          700: 'rgb(var(--c-ink-700) / <alpha-value>)',
+          600: 'rgb(var(--c-ink-600) / <alpha-value>)',
+          500: 'rgb(var(--c-ink-500) / <alpha-value>)',
         },
-        fg: '#16171B',
-        night: '#14151A',
+        fg: 'rgb(var(--c-fg) / <alpha-value>)',
+        night: 'rgb(var(--c-night) / <alpha-value>)',
+        nightalt: 'rgb(var(--c-night-alt) / <alpha-value>)',
         gold: {
-          DEFAULT: '#B8922B',
-          light: '#E9D49A',
-          dark: '#8F6B10',
-          deep: '#6E5208',
+          DEFAULT: 'rgb(var(--c-gold) / <alpha-value>)',
+          light: 'rgb(var(--c-gold-light) / <alpha-value>)',
+          dark: 'rgb(var(--c-gold-dark) / <alpha-value>)',
+          deep: 'rgb(var(--c-gold-deep) / <alpha-value>)',
         },
         ash: {
-          DEFAULT: '#555963',
-          light: '#3D4048',
-          dark: '#7D818A',
+          DEFAULT: 'rgb(var(--c-ash) / <alpha-value>)',
+          light: 'rgb(var(--c-ash-light) / <alpha-value>)',
+          dark: 'rgb(var(--c-ash-dark) / <alpha-value>)',
         },
       },
       fontFamily: {
-        display: ['"Playfair Display"', 'Georgia', 'serif'],
-        body: ['Inter', 'sans-serif'],
+        display: ['var(--font-display)'],
+        body: ['var(--font-body)'],
         brand: ['Montserrat', 'Inter', 'sans-serif'],
       },
       fontSize: {
@@ -46,8 +48,12 @@ export default {
       animation: {
         'marquee': 'marquee 30s linear infinite',
         'grain': 'grain 8s steps(10) infinite',
+        'kenburns': 'kenburns 7s ease-out forwards',
+        'float': 'float 9s ease-in-out infinite',
       },
       keyframes: {
+        kenburns: { '0%': { transform: 'scale(1)' }, '100%': { transform: 'scale(1.08)' } },
+        float: { '0%, 100%': { transform: 'translate(0, 0)' }, '50%': { transform: 'translate(30px, -24px)' } },
         marquee: {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-50%)' },

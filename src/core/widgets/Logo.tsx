@@ -23,7 +23,7 @@ const SIZES = {
 // house under a roof line, with a four-pane window.
 export function LogoMark({ size = 38, tone = 'dark', className = '' }: { size?: number; tone?: 'dark' | 'light'; className?: string }) {
   const id = useId().replace(/:/g, '');
-  if (flavor.logo) return <LogoImage height={size} tone={tone} className={className} />;
+  if (flavor.logo) return <LogoImage height={size} className={className} />;
   const ink = tone === 'light' ? '#FFFFFF' : BRAND_INK;
   return (
     <svg width={size} height={(size * 56) / 48} viewBox="0 0 48 56" className={className} aria-hidden>
@@ -48,14 +48,14 @@ export function LogoMark({ size = 38, tone = 'dark', className = '' }: { size?: 
 
 const IMAGE_HEIGHT = { sm: 40, md: 52, lg: 96 };
 
-// The supplied logo is a JPG on white, so blend it into light backgrounds and sit it on a white tile over dark ones
-function LogoImage({ height, tone, className = '' }: { height: number; tone: 'dark' | 'light'; className?: string }) {
+// The supplied logo is a square on a dark background, so it is shown as a rounded tile on any page background
+function LogoImage({ height, className = '' }: { height: number; className?: string }) {
   return (
     <img
       src={flavor.logo}
       alt={CONTACT.company}
       style={{ height, width: height }}
-      className={`object-contain ${tone === 'light' ? 'bg-white rounded-xl p-1' : 'mix-blend-multiply'} ${className}`}
+      className={`object-contain rounded-xl ${className}`}
     />
   );
 }
@@ -63,7 +63,7 @@ function LogoImage({ height, tone, className = '' }: { height: number; tone: 'da
 export default function Logo({ tone = 'dark', size = 'md', showTagline = true, className = '' }: LogoProps) {
   const s = SIZES[size];
   const light = tone === 'light';
-  if (flavor.logo) return <LogoImage height={IMAGE_HEIGHT[size]} tone={tone} className={className} />;
+  if (flavor.logo) return <LogoImage height={IMAGE_HEIGHT[size]} className={className} />;
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
       <LogoMark size={s.mark} tone={tone} />

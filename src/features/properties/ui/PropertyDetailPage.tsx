@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { usePropertyDetailViewModel } from '@/features/properties/viewmodel/usePropertyDetailViewModel';
 import type { NearbyCategory } from '@/features/properties/model/property';
 import {
-  Bed, Bath, Maximize, MapPin, ChevronLeft, ChevronRight, X, Share2, Check, CalendarCheck, Phone,
+  Bed, Bath, Maximize, MapPin, Share2, Check, CalendarCheck, Phone,
   PlayCircle, Video, LayoutGrid, GraduationCap, Hospital, ShoppingBag, TrainFront, Trees, MessageCircle,
 } from 'lucide-react';
 import SiteVisitModal from '@/features/properties/ui/SiteVisitModal';
@@ -22,6 +22,8 @@ import ScrollReveal from '@/core/widgets/ScrollReveal';
 import PropertyFacts from '@/features/properties/ui/PropertyFacts';
 import PropertyCard from '@/features/properties/ui/PropertyCard';
 import { images } from '@/res';
+import { isPriceRange } from '@/core/utils/pricing';
+import ImageLightbox from '@/core/widgets/ImageLightbox';
 
 export default function PropertyDetail() {
   const { id } = useParams();
@@ -66,8 +68,6 @@ export default function PropertyDetail() {
 
   const openLightbox = (i: number) => setLightboxIndex(i);
   const closeLightbox = () => setLightboxIndex(null);
-  const nextImage = () => setLightboxIndex((i) => i !== null ? (i + 1) % property.images.length : null);
-  const prevImage = () => setLightboxIndex((i) => i !== null ? (i - 1 + property.images.length) % property.images.length : null);
 
   return (
     <div className="min-h-screen bg-ink-900 pt-28">
@@ -268,8 +268,11 @@ export default function PropertyDetail() {
           <div className="lg:col-span-4">
             <div className="lg:sticky lg:top-28">
               <div className="bg-white rounded-2xl shadow-card p-8">
-                <p className="text-ash-dark text-xs uppercase tracking-wider mb-2">{t('detail.price')}</p>
-                <p className={`font-display font-semibold text-gold text-4xl ${property.priceNegotiable ? 'mb-1' : 'mb-6'}`}>{property.price}</p>
+                <p className="text-ash-dark text-xs uppercase tracking-wider mb-2 flex items-center gap-2">
+                  {t('detail.price')}
+                  {isPriceRange(property.priceValue, property.priceMax) && <span className="px-2 py-0.5 normal-case rounded-full bg-gold/10 text-gold text-[0.6875rem] font-semibold uppercase tracking-wide">{t('price.approx')}</span>}
+                </p>
+                <p className={`font-display font-semibold text-gold ${isPriceRange(property.priceValue, property.priceMax) ? 'text-3xl' : 'text-4xl'} ${property.priceNegotiable ? 'mb-1' : 'mb-6'}`}>{property.price}</p>
                 {property.priceNegotiable && <p className="text-ash text-sm mb-6">{t('detail.negotiable')}</p>}
 
                 <div className="space-y-3 mb-6 pb-6 border-b border-fg/8">
@@ -355,26 +358,7 @@ export default function PropertyDetail() {
       </div>
 
       {lightboxIndex !== null && (
-        <div className="fixed inset-0 z-[8000] bg-night/95 flex items-center justify-center" onClick={closeLightbox}>
-          <button className="absolute top-6 right-6 text-white hover:text-gold" onClick={closeLightbox}>
-            <X size={32} />
-          </button>
-          <button className="absolute left-6 text-white hover:text-gold" onClick={(e) => { e.stopPropagation(); prevImage(); }}>
-            <ChevronLeft size={40} />
-          </button>
-          <img
-            src={property.images[lightboxIndex]}
-            alt={t('detail.gallery')}
-            className="max-w-[90vw] max-h-[85vh] object-contain"
-            onClick={(e) => e.stopPropagation()}
-          />
-          <button className="absolute right-6 text-white hover:text-gold" onClick={(e) => { e.stopPropagation(); nextImage(); }}>
-            <ChevronRight size={40} />
-          </button>
-          <p className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/70 text-sm">
-            {lightboxIndex + 1} / {property.images.length}
-          </p>
-        </div>
+        <ImageLightbox images={property.images} index={lightboxIndex} alt={t('detail.gallery')} onChange={setLightboxIndex} onClose={closeLightbox} />
       )}
     </div>
   );

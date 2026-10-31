@@ -54,5 +54,27 @@ export function useProfileViewModel() {
     }
   };
 
-  return { profile, loading, busy, message, change, save, signOut };
+  const [pwBusy, setPwBusy] = useState(false);
+  const [pwMessage, setPwMessage] = useState<{ kind: 'ok' | 'error'; text: string } | null>(null);
+
+  /** Resolves true on success so the form can clear itself. */
+  const changePassword = async (current: string, next: string, confirm: string) => {
+    if (!profileRepository) return false;
+    if (next.length < 8) return setPwMessage({ kind: 'error', text: t('profile.errPwShort') }), false;
+    if (next !== confirm) return setPwMessage({ kind: 'error', text: t('profile.errPwMatch') }), false;
+    setPwBusy(true);
+    setPwMessage(null);
+    try {
+      await profileRepository.changePassword(current, next);
+      setPwMessage({ kind: 'ok', text: t('profile.pwChanged') });
+      return true;
+    } catch (e) {
+      setPwMessage({ kind: 'error', text: e instanceof Error ? e.message : t('profile.pwFailed') });
+      return false;
+    } finally {
+      setPwBusy(false);
+    }
+  };
+
+  return { profile, loading, busy, message, change, save, signOut, pwBusy, pwMessage, changePassword };
 }

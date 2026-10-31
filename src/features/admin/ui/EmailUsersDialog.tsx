@@ -70,7 +70,7 @@ export default function EmailUsersDialog({ open, onClose }: { open: boolean; onC
                 {vm.found.status === 'ready' && vm.found.items.length === 0 && <p className="p-3 text-xs text-ash">{t('users.none')}</p>}
                 {vm.found.items.map((u) => (
                   <label key={u.id} className="flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-ink-900">
-                    <input type="checkbox" checked={vm.isPicked(u.id)} onChange={() => vm.togglePicked(u)} className="accent-[#B8922B] w-4 h-4" />
+                    <input type="checkbox" checked={vm.isPicked(u.id)} onChange={() => vm.togglePicked(u)} className="accent-gold w-4 h-4" />
                     <span className="min-w-0 flex-1">
                       <span className="block text-sm text-fg truncate">{u.name}</span>
                       <span className="block text-xs text-ash truncate">{u.countryCode} {u.mobileNumber} · {u.email}</span>

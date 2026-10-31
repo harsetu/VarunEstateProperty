@@ -24,6 +24,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li><Link to="/" className="text-ash hover:text-gold text-sm transition-colors">{t('nav.home')}</Link></li>
               <li><Link to="/properties" className="text-ash hover:text-gold text-sm transition-colors">{t('nav.properties')}</Link></li>
+              <li><Link to="/investment" className="text-ash hover:text-gold text-sm transition-colors">{t('nav.investment')}</Link></li>
               <li><Link to="/about" className="text-ash hover:text-gold text-sm transition-colors">{t('nav.aboutUs')}</Link></li>
               <li><Link to="/contact" className="text-ash hover:text-gold text-sm transition-colors">{t('nav.contact')}</Link></li>
             </ul>

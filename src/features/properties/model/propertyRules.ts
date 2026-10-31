@@ -1,4 +1,4 @@
-import type { NewProject, Property, PropertyType, Purpose } from '@/features/properties/model/property';
+import type { Label, NewProject, Property, PropertyType, Purpose } from '@/features/properties/model/property';
 import { formatINR } from '@/core/utils/pricing';
 
 export type { SortKey } from '@/features/properties/repository/PropertyRepository';
@@ -66,10 +66,10 @@ export const pageOf = (list: Property[], { purpose, type, segment, sector, label
   return { items: matches.slice((current - 1) * size, current * size), total: matches.length, page: current, totalPages };
 };
 
-/** Listings the admin tagged NEW_LAUNCH, shaped as launch projects for the home page. */
-export const newLaunchProjects = (list: Property[]): NewProject[] =>
+/** Listings the admin tagged with `label`, shaped as projects for the project cards. */
+export const projectsWithLabel = (list: Property[], label: Label): NewProject[] =>
   list
-    .filter((p) => p.labels?.includes('NEW_LAUNCH'))
+    .filter((p) => p.labels?.includes(label))
     .map((p) => ({
       id: p.id,
       name: p.title,
@@ -81,5 +81,8 @@ export const newLaunchProjects = (list: Property[]): NewProject[] =>
       sizeRange: p.area,
       startingPrice: p.price,
       image: p.images[0] ?? '',
+      images: p.images,
       highlights: [...(p.usps ?? []), ...p.amenities].slice(0, 4),
     }));
+
+export const newLaunchProjects = (list: Property[]) => projectsWithLabel(list, 'NEW_LAUNCH');

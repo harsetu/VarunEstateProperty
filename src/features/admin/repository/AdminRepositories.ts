@@ -1,4 +1,5 @@
 import type { Property } from '@/features/properties/model/property';
+import type { ThemeId } from '@/core/theme/themes';
 import type { Dashboard, Profile } from '@/features/admin/model/admin';
 
 export type { AdminUser } from '@/core/network/session';
@@ -37,6 +38,15 @@ export interface UserRepository {
 export interface ProfileRepository {
   get(): Promise<Profile>;
   update(profile: Profile): Promise<Profile>;
+  /** Rejects with a readable message, e.g. when the current password is wrong. */
+  changePassword(currentPassword: string, newPassword: string): Promise<void>;
+}
+
+export interface ThemeRepository {
+  /** Public: the site-wide theme. */
+  get(): Promise<ThemeId>;
+  /** Admin only. Rejects with a readable message (400 / 401 / 403). */
+  update(theme: ThemeId): Promise<ThemeId>;
 }
 
 export interface DashboardRepository {

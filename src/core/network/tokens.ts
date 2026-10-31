@@ -16,16 +16,18 @@ export const toSession = (t: TokenResponse, fallbackUsername: string): Session =
 /** The backend reports errors as { code, message }. */
 /** An error from a non-2xx response, keeping the status so callers can tell 403 from the rest. */
 export class HttpError extends Error {
-  constructor(message: string, readonly status: number) {
+  constructor(message: string, readonly status: number, readonly code?: string) {
     super(message);
   }
 }
 
-export const errorMessage = async (res: Response, fallback: string) => {
+export const errorDetails = async (res: Response, fallback: string) => {
   try {
-    const body = (await res.json()) as { message?: string };
-    return body.message || fallback;
+    const body = (await res.json()) as { message?: string; code?: string };
+    return { message: body.message || fallback, code: body.code };
   } catch {
-    return fallback;
+    return { message: fallback, code: undefined };
   }
 };
+
+export const errorMessage = async (res: Response, fallback: string) => (await errorDetails(res, fallback)).message;

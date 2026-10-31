@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { ExternalLink, Instagram, Play } from 'lucide-react';
+import { ExternalLink, Play } from 'lucide-react';
 import { embedUrl, parseVideoUrl, thumbnailUrl } from '@/features/reviews/model/review';
-import Modal from '@/core/widgets/Modal';
 import { t } from '@/core/utils/i18n';
 
 interface Props {
@@ -11,9 +10,9 @@ interface Props {
   className?: string;
 }
 
-/** A play tile (thumbnail where one exists). Clicking it opens the video in a dialog, so nothing loads until then. */
+/** A play tile (thumbnail where one exists). Clicking it plays the video inside the same frame, with no popup. Instagram embeds sit in the frame straight away. */
 export default function ReviewVideo({ url, fill = false, className = '' }: Props) {
-  const [open, setOpen] = useState(false);
+  const [playing, setPlaying] = useState(false);
   const src = parseVideoUrl(url);
   const box = `${fill ? 'absolute inset-0 h-full' : 'aspect-video'} w-full bg-night ${className}`;
 
@@ -32,45 +31,39 @@ export default function ReviewVideo({ url, fill = false, className = '' }: Props
 
   const thumb = thumbnailUrl(src);
   const portrait = src.kind === 'instagram';
-  return (
-    <>
-      <button type="button" onClick={() => setOpen(true)} aria-label={t('reviewsHome.play')} className={`${box} group block overflow-hidden`}>
-        {thumb && <img src={thumb} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />}
-        {portrait && (
-          <span className="absolute inset-0 bg-gradient-to-br from-[#833ab4]/70 via-[#fd1d1d]/60 to-[#fcb045]/70 flex items-start justify-center pt-[14%]">
-            <Instagram size={36} className="text-white/90" />
-          </span>
-        )}
-        <span className="absolute inset-0 bg-night/20 group-hover:bg-transparent transition-colors" />
-        <span className="absolute inset-0 flex items-center justify-center">
-          <span className="w-14 h-14 rounded-full bg-gold text-white flex items-center justify-center shadow-card-hover group-hover:scale-110 transition-transform">
-            <Play size={22} className="fill-white ml-0.5" />
-          </span>
-        </span>
-      </button>
 
-      {/* Mounted only while open, so closing it stops playback */}
-      <Modal open={open} onClose={() => setOpen(false)} title={t('reviewsHome.dialogTitle')} size="sheet">
+  // Plays right here: the iframe / video takes the place of the tile, in the same box
+  if (playing || portrait) {
+    return (
+      <div className={`${box} overflow-hidden`}>
         {src.kind === 'file' ? (
-          <video controls autoPlay playsInline className="w-full max-h-[78vh] rounded-xl bg-night -mt-2">
+          <video controls autoPlay playsInline className="absolute inset-0 w-full h-full object-contain bg-night">
             <source src={src.url} />
           </video>
         ) : (
           <iframe
             src={embedUrl(src, true)}
             title={t('reviewsHome.play')}
-            className={`rounded-xl bg-night -mt-2 ${portrait ? 'block mx-auto w-full max-w-md h-[min(78vh,680px)]' : 'w-full aspect-video max-h-[78vh]'}`}
+            loading="lazy"
+            className="absolute inset-0 w-full h-full border-0 bg-night"
             allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
             allowFullScreen
             referrerPolicy="strict-origin-when-cross-origin"
           />
         )}
-        {portrait && (
-          <a href={url} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-1.5 text-sm text-gold font-semibold hover:underline">
-            <ExternalLink size={14} /> {t('reviewsHome.watch')}
-          </a>
-        )}
-      </Modal>
-    </>
+      </div>
+    );
+  }
+
+  return (
+    <button type="button" onClick={() => setPlaying(true)} aria-label={t('reviewsHome.play')} className={`${box} group block overflow-hidden`}>
+      {thumb && <img src={thumb} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />}
+      <span className="absolute inset-0 bg-night/20 group-hover:bg-transparent transition-colors" />
+      <span className="absolute inset-0 flex items-center justify-center">
+        <span className="w-14 h-14 rounded-full bg-gold text-white flex items-center justify-center shadow-card-hover group-hover:scale-110 transition-transform">
+          <Play size={22} className="fill-white ml-0.5" />
+        </span>
+      </span>
+    </button>
   );
 }

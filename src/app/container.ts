@@ -1,6 +1,6 @@
 import flavor from '@/flavors';
 import type { PropertyRepository } from '@/features/properties/repository/PropertyRepository';
-import type { AuthService, ListingAdminRepository, DashboardRepository, UserRepository, ProfileRepository } from '@/features/admin/repository/AdminRepositories';
+import type { AuthService, ListingAdminRepository, DashboardRepository, UserRepository, ProfileRepository, ThemeRepository } from '@/features/admin/repository/AdminRepositories';
 import { StaticPropertyRepository } from '@/features/properties/repository/StaticPropertyRepository';
 import { ApiPropertyRepository } from '@/features/properties/repository/ApiPropertyRepository';
 import { FlavorHomeRepository } from '@/features/home/data/FlavorHomeRepository';
@@ -15,6 +15,7 @@ import type { LocationSearchRepository } from '@/features/admin/repository/Locat
 import { NominatimLocationSearch } from '@/features/admin/repository/NominatimLocationSearch';
 import type { ReviewRepository } from '@/features/reviews/repository/ReviewRepository';
 import { ApiReviewRepository } from '@/features/reviews/repository/ApiReviewRepository';
+import { ApiThemeRepository } from '@/features/admin/repository/ApiThemeRepository';
 import { ApiUserRepository } from '@/features/admin/repository/ApiUserRepository';
 
 // Composition root: the only place that knows which implementations back the app.
@@ -37,6 +38,8 @@ export const propertyRepository: PropertyRepository =
 export const authService: AuthService | null = apiRoot ? new ApiAuthService(apiRoot) : null;
 export const listingAdmin: ListingAdminRepository | null = apiRoot ? new ApiListingAdmin(apiRoot) : null;
 export const profileRepository: ProfileRepository | null = apiRoot ? new ApiProfileRepository(apiRoot) : null;
+/** null until an API is configured; the site then keeps the default theme. */
+export const themeRepository: ThemeRepository | null = apiRoot ? new ApiThemeRepository(apiRoot) : null;
 export const userRepository: UserRepository | null = apiRoot ? new ApiUserRepository(apiRoot) : null;
 /** null until an API is configured; the website then hides its reviews section. */
 export const reviewRepository: ReviewRepository | null = apiRoot ? new ApiReviewRepository(apiRoot) : null;

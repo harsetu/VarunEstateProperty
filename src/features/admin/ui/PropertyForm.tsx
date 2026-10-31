@@ -16,11 +16,12 @@ const iconBtn = 'p-1.5 rounded-lg bg-white/90 text-fg hover:text-gold disabled:o
 
 const caption = 'block text-xs font-semibold text-ash-dark uppercase tracking-wider mb-1';
 
-const Label = ({ text, children, className = '', required, hint }: { text: string; children: ReactNode; className?: string; required?: boolean; hint?: string }) => (
+const Label = ({ text, children, className = '', required, hint, error }: { text: string; children: ReactNode; className?: string; required?: boolean; hint?: string; error?: string }) => (
   <label className={`block ${className}`}>
     <span className={caption}>{text}{required && <span className="text-red-500"> *</span>}</span>
     {children}
     {hint && <span className="block text-xs text-ash mt-1">{hint}</span>}
+    {error && <span role="alert" className="block text-xs text-red-600 mt-1">{error}</span>}
   </label>
 );
 
@@ -200,6 +201,20 @@ export default function PropertyForm({ vm }: { vm: VM }) {
           hint={d.priceValue > 0 ? t('form.priceShownAs', { price: formatINR(d.priceValue) }) : undefined}
         >
           <input type="number" min={0} className={field} value={d.priceValue || ''} onChange={(e) => vm.setField('priceValue', Number(e.target.value))} />
+        </Label>
+        <Label
+          text={t('form.priceMax')}
+          hint={vm.priceMaxError ? undefined : t('form.priceMaxHint')}
+          error={vm.priceMaxError}
+        >
+          <input
+            type="number"
+            min={0}
+            aria-invalid={Boolean(vm.priceMaxError)}
+            className={`${field} ${vm.priceMaxError ? '!border-red-500' : ''}`}
+            value={d.priceMax ?? ''}
+            onChange={(e) => vm.setField('priceMax', e.target.value === '' ? undefined : Number(e.target.value))}
+          />
         </Label>
         {rules.deposit && num('securityDeposit', t('form.deposit'))}
         {rules.maintenance && num('maintenanceCharge', t('form.maintenance'))}

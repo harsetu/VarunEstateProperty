@@ -53,7 +53,7 @@ export default function QuoteSection() {
               className="h-1 transition-all duration-500"
               style={{
                 width: i === index ? 40 : 16,
-                backgroundColor: i === index ? '#B8922B' : 'rgba(22,23,27,0.18)',
+                backgroundColor: i === index ? 'rgb(var(--c-gold))' : 'rgb(var(--c-fg) / 0.18)',
               }}
             />
           ))}

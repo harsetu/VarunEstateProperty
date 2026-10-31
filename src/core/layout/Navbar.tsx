@@ -5,10 +5,12 @@ import { CONTACT, mapLink } from '@/core/config/contact';
 import { SOCIAL_LINKS } from '@/core/utils/socialLinks';
 import Logo from '@/core/widgets/Logo';
 import { t } from '@/core/utils/i18n';
+import { useTheme } from '@/core/theme/ThemeProvider';
 
 const NAV_LINKS = [
   { label: t('nav.home'), path: '/' },
   { label: t('nav.properties'), path: '/properties' },
+  { label: t('nav.investment'), path: '/investment' },
   { label: t('nav.about'), path: '/about' },
   { label: t('nav.contact'), path: '/contact' },
 ];
@@ -17,6 +19,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const theme = useTheme();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -31,6 +34,8 @@ export default function Navbar() {
 
   // Transparent over the home hero until the page is scrolled
   const overHero = location.pathname === '/' && !scrolled && !open;
+  // THEME2/3 open with a dark banner, so the bar's text goes light while it is transparent
+  const onDark = overHero && theme !== 'THEME1';
 
   return (
     <>
@@ -94,8 +99,8 @@ export default function Navbar() {
                   to={link.path}
                   className={`text-[0.9375rem] font-medium transition-colors ${
                     active
-                      ? 'text-gold'
-                      : 'text-ash hover:text-fg'
+                      ? (onDark ? 'text-gold-light' : 'text-gold')
+                      : onDark ? 'text-white/85 hover:text-white' : 'text-ash hover:text-fg'
                   }`}
                 >
                   {link.label}
@@ -105,7 +110,7 @@ export default function Navbar() {
             <a
               href={CONTACT.phoneHref}
               className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors ${
-                'bg-fg text-white hover:bg-gold'
+                onDark ? 'bg-white text-fg hover:bg-gold hover:text-white' : 'bg-fg text-white hover:bg-gold'
               }`}
             >
               <Phone size={15} /> {CONTACT.phoneDisplay}
@@ -113,7 +118,7 @@ export default function Navbar() {
           </div>
 
           <button
-            className={`md:hidden text-fg`}
+            className={`md:hidden ${onDark ? 'text-white' : 'text-fg'}`}
             onClick={() => setOpen(!open)}
             aria-label={t('nav.menu')}
           >

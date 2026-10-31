@@ -1,3 +1,4 @@
+import { cssColor } from '@/core/theme/themes';
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -28,7 +29,7 @@ export default function Statement() {
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       wordsRef.current.forEach((w) => {
-        if (w) w.style.color = '#16171B';
+        if (w) w.style.color = cssColor('--c-fg');
       });
       return;
     }
@@ -38,7 +39,7 @@ export default function Statement() {
 
     const ctx = gsap.context(() => {
       gsap.to(wordsRef.current, {
-        color: (_i, el) => (el.dataset.gold === 'true' ? '#B8922B' : '#16171B'),
+        color: (_i, el) => (el.dataset.gold === 'true' ? cssColor('--c-gold') : cssColor('--c-fg')),
         stagger: 0.05,
         ease: 'none',
         scrollTrigger: {

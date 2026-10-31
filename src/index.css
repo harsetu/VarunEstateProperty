@@ -1,8 +1,42 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@300;400;500;600;700&family=Lato:wght@400;700;900&family=Baskervville:ital@0;1&family=Nunito:wght@400;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  /* Theme palettes: RGB channels, so Tailwind opacity utilities (bg-gold/10) keep working.
+     THEME1 is the default and also what the admin panel uses. */
+  :root,
+  [data-theme='THEME1'] {
+    --c-ink-900: 250 248 244; --c-ink-800: 243 239 231; --c-ink-700: 255 255 255; --c-ink-600: 236 231 221; --c-ink-500: 226 220 208;
+    --c-fg: 22 23 27; --c-night: 20 21 26; --c-night-alt: 27 36 54;
+    --c-gold: 184 146 43; --c-gold-light: 233 212 154; --c-gold-dark: 143 107 16; --c-gold-deep: 110 82 8;
+    --c-ash: 85 89 99; --c-ash-light: 61 64 72; --c-ash-dark: 125 129 138;
+    --radius-btn: 9999px;
+    --font-display: 'Playfair Display', Georgia, serif; --font-body: 'Inter', sans-serif; --em-style: italic;
+  }
+
+  /* Property Master style: same colours as THEME1; Lato type, squarer buttons, video hero (see HeroVideo) */
+  [data-theme='THEME2'] {
+    --c-ink-900: 250 248 244; --c-ink-800: 243 239 231; --c-ink-700: 255 255 255; --c-ink-600: 236 231 221; --c-ink-500: 226 220 208;
+    --c-fg: 22 23 27; --c-night: 20 21 26; --c-night-alt: 27 36 54;
+    --c-gold: 184 146 43; --c-gold-light: 233 212 154; --c-gold-dark: 143 107 16; --c-gold-deep: 110 82 8;
+    --c-ash: 85 89 99; --c-ash-light: 61 64 72; --c-ash-dark: 125 129 138;
+    --radius-btn: 0.5rem;
+    --font-display: 'Lato', sans-serif; --font-body: 'Lato', sans-serif; --em-style: normal;
+  }
+
+  /* Elivaas style: same colours as THEME1; serif headings, rounded body, carousel hero (see HeroCarousel) */
+  [data-theme='THEME3'] {
+    --c-ink-900: 250 248 244; --c-ink-800: 243 239 231; --c-ink-700: 255 255 255; --c-ink-600: 236 231 221; --c-ink-500: 226 220 208;
+    --c-fg: 22 23 27; --c-night: 20 21 26; --c-night-alt: 27 36 54;
+    --c-gold: 184 146 43; --c-gold-light: 233 212 154; --c-gold-dark: 143 107 16; --c-gold-deep: 110 82 8;
+    --c-ash: 85 89 99; --c-ash-light: 61 64 72; --c-ash-dark: 125 129 138;
+    --radius-btn: 9999px;
+    --font-display: 'Baskervville', Baskerville, Georgia, serif; --font-body: 'Nunito', system-ui, sans-serif; --em-style: italic;
+  }
+}
 
 @layer base {
   * {
@@ -17,14 +51,14 @@
   }
 
   body {
-    background-color: #FAF8F4;
-    color: #16171B;
-    font-family: 'Inter', sans-serif;
+    background-color: rgb(var(--c-ink-900));
+    color: rgb(var(--c-fg));
+    font-family: var(--font-body);
     overflow-x: hidden;
   }
 
   ::selection {
-    background: #B8922B;
+    background: rgb(var(--c-gold));
     color: #fff;
   }
 }
@@ -36,37 +70,37 @@
     justify-content: center;
     gap: 0.5rem;
     padding: 0.8rem 1.6rem;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     font-weight: 600;
     font-size: 0.9375rem;
     color: #fff;
-    background: #16171B;
-    border: 1px solid #16171B;
-    border-radius: 9999px;
+    background: rgb(var(--c-fg));
+    border: 1px solid rgb(var(--c-fg));
+    border-radius: var(--radius-btn);
     cursor: pointer;
     transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
   }
 
   .neopop-btn:hover {
-    background: #B8922B;
-    border-color: #B8922B;
+    background: rgb(var(--c-gold));
+    border-color: rgb(var(--c-gold));
     transform: translateY(-1px);
   }
 
   .neopop-btn-outline {
-    color: #16171B;
+    color: rgb(var(--c-fg));
     background: transparent;
-    border: 1px solid rgba(22, 23, 27, 0.2);
+    border: 1px solid rgb(var(--c-fg) / 0.2);
   }
 
   .neopop-btn-outline:hover {
     color: #fff;
-    background: #16171B;
-    border-color: #16171B;
+    background: rgb(var(--c-fg));
+    border-color: rgb(var(--c-fg));
   }
 
   .neopop-btn-dark {
-    color: #16171B;
+    color: rgb(var(--c-fg));
     background: #fff;
     border-color: #fff;
   }
@@ -113,7 +147,7 @@
 .cursor-dot {
   width: 8px;
   height: 8px;
-  background: #B8922B;
+  background: rgb(var(--c-gold));
   border-radius: 50%;
   transform: translate(-50%, -50%);
 }
@@ -121,7 +155,7 @@
 .cursor-ring {
   width: 40px;
   height: 40px;
-  border: 1.5px solid rgba(184, 146, 43, 0.6);
+  border: 1.5px solid rgb(var(--c-gold) / 0.6);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, background 0.3s ease;
@@ -130,14 +164,14 @@
 .cursor-ring.expanded {
   width: 80px;
   height: 80px;
-  border-color: rgba(212, 175, 55, 0.8);
-  background: rgba(212, 175, 55, 0.1);
+  border-color: rgb(var(--c-gold) / 0.8);
+  background: rgb(var(--c-gold) / 0.1);
 }
 
 .cursor-ring.view-mode {
   width: 100px;
   height: 100px;
-  background: rgba(212, 175, 55, 0.9);
+  background: rgb(var(--c-gold) / 0.9);
   border-color: transparent;
 }
 
@@ -174,18 +208,18 @@ html {
 }
 
 .text-outline {
-  -webkit-text-stroke: 1px rgba(184, 146, 43, 0.55);
+  -webkit-text-stroke: 1px rgb(var(--c-gold) / 0.55);
   color: transparent;
 }
 
 .text-outline-dark {
-  -webkit-text-stroke: 1px rgba(22, 23, 27, 0.3);
+  -webkit-text-stroke: 1px rgb(var(--c-fg) / 0.3);
   color: transparent;
 }
 
 .gold-gradient-text {
-  font-style: italic;
-  background: linear-gradient(135deg, #9C7A1E 0%, #C9A23A 50%, #9C7A1E 100%);
+  font-style: var(--em-style);
+  background: linear-gradient(135deg, rgb(var(--c-gold-dark)) 0%, rgb(var(--c-gold)) 50%, rgb(var(--c-gold-dark)) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
