@@ -20,11 +20,11 @@ const flavor: Flavor = {
   market: 'Faridabad',
   logo: images.logos.rworld,
   geo: { area: 'Faridabad', bounds: [77.1, 28.15, 77.52, 28.52] },
-  owner: { name: 'Smeer Arora', photo: images.owners.smeer },
+  owner: { name: 'Sameer Arora', photo: images.owners.smeer },
   contact: {
     company: 'R World',
     tagline: 'Your property, our priority',
-    person: 'Smeer Arora',
+    person: 'Sameer Arora',
     address: 'Ground Floor, BPTP Park Avenue-40, Block Avenue-40, near DPS School, Sector 81, Faridabad, Haryana 121007',
     addressShort: 'Sector 81, Faridabad',
     mapQuery: '28.3951599,77.3467323',
