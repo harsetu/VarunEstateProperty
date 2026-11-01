@@ -39,41 +39,45 @@ export default function HeroCarousel() {
 
   return (
     <section
-      className="relative h-[100svh] min-h-[600px] overflow-hidden rounded-b-[2.5rem] bg-night text-white"
+      className="relative flex flex-col md:block md:h-[100svh] md:min-h-[600px] overflow-hidden md:rounded-b-[2.5rem] bg-night text-white"
       onPointerEnter={() => setPaused(true)}
       onPointerLeave={() => setPaused(false)}
     >
-      {HERO_SLIDES.map((s, i) => (
-        <img
-          key={s.image}
-          src={s.image}
-          alt=""
-          loading={i === 0 ? 'eager' : 'lazy'}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${i === at ? 'opacity-100 animate-kenburns' : 'opacity-0'}`}
-        />
-      ))}
-      <div className="absolute inset-0 bg-gradient-to-r from-night/75 via-night/30 to-transparent" />
-      <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-night/70 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-night/70 to-transparent" />
-
-      <div className="relative h-full max-w-[1280px] mx-auto px-5 lg:px-8 flex flex-col justify-center pb-28">
+      {/* Photos are always shown whole (a blurred copy fills any gap), so nothing is cropped on any screen */}
+      <div className="relative aspect-[4/3] md:aspect-auto md:absolute md:inset-0">
         {HERO_SLIDES.map((s, i) => (
-          <div key={s.titleKey} className={`absolute max-w-xl transition-all duration-700 ${i === at ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
-            <p className="text-gold-light text-sm font-semibold uppercase tracking-[0.18em] mb-3">{t(s.subtitleKey, { market: flavor.market })}</p>
-            <h1 className="font-display italic text-[clamp(2.4rem,6vw,4.75rem)] leading-[1.05]">{t(s.titleKey)}</h1>
+          <div key={s.image} className={`absolute inset-0 transition-opacity duration-1000 ${i === at ? 'opacity-100' : 'opacity-0'}`}>
+            <img src={s.image} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover scale-125 blur-2xl opacity-60" />
+            <img src={s.image} alt="" loading={i === 0 ? 'eager' : 'lazy'} className="absolute inset-0 w-full h-full object-contain" />
           </div>
         ))}
+        <div className="absolute inset-0 hidden md:block bg-gradient-to-r from-night/60 via-night/15 to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-32 md:h-48 bg-gradient-to-b from-night/70 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 hidden md:block h-1/2 bg-gradient-to-t from-night/70 to-transparent" />
+        <button onClick={() => go(-1)} aria-label={t('heroc.prev')} className="absolute left-3 lg:left-6 top-1/2 -translate-y-1/2 w-9 h-9 md:w-11 md:h-11 rounded-full bg-black/30 md:bg-white/15 backdrop-blur hover:bg-white/30 flex items-center justify-center">
+          <ChevronLeft size={22} />
+        </button>
+        <button onClick={() => go(1)} aria-label={t('heroc.next')} className="absolute right-3 lg:right-6 top-1/2 -translate-y-1/2 w-9 h-9 md:w-11 md:h-11 rounded-full bg-black/30 md:bg-white/15 backdrop-blur hover:bg-white/30 flex items-center justify-center">
+          <ChevronRight size={22} />
+        </button>
       </div>
 
-      <button onClick={() => go(-1)} aria-label={t('heroc.prev')} className="absolute left-3 lg:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/15 backdrop-blur hover:bg-white/30 flex items-center justify-center">
-        <ChevronLeft size={22} />
-      </button>
-      <button onClick={() => go(1)} aria-label={t('heroc.next')} className="absolute right-3 lg:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/15 backdrop-blur hover:bg-white/30 flex items-center justify-center">
-        <ChevronRight size={22} />
-      </button>
+      {/* Headline: under the photo on phones, over it from md up */}
+      <div className="relative md:absolute md:inset-0 md:pointer-events-none">
+        <div className="max-w-[1280px] mx-auto px-5 lg:px-8 pt-5 md:pt-0 md:h-full md:flex md:flex-col md:justify-center md:pb-28">
+          <div className="grid max-w-xl">
+            {HERO_SLIDES.map((s, i) => (
+              <div key={s.titleKey} className={`col-start-1 row-start-1 transition-all duration-700 ${i === at ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                <p className="text-gold-light text-xs md:text-sm font-semibold uppercase tracking-[0.18em] mb-2 md:mb-3">{t(s.subtitleKey, { market: flavor.market })}</p>
+                <h1 className="font-display italic text-[clamp(1.75rem,6vw,4.75rem)] leading-[1.05]">{t(s.titleKey)}</h1>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
-      <div className="absolute inset-x-0 bottom-8 px-5 lg:px-8 flex flex-col items-center gap-4">
-        <form onSubmit={search} className="w-full max-w-3xl grid grid-cols-[1fr_1fr_auto] items-center gap-1 rounded-full bg-white/15 backdrop-blur-md border border-white/25 pl-6 pr-2 py-2">
+      <div className="relative md:absolute md:inset-x-0 md:bottom-8 md:z-10 px-5 lg:px-8 py-6 md:py-0 flex flex-col items-center gap-4">
+        <form onSubmit={search} className="w-full max-w-3xl grid grid-cols-[1fr_1fr_auto] items-center gap-1 rounded-2xl md:rounded-full bg-white/15 backdrop-blur-md border border-white/25 pl-4 md:pl-6 pr-2 py-2">
           <label className="block pr-3 border-r border-white/25">
             <span className="block text-[0.6875rem] text-white/65">{t('heroc.location')}</span>
             <select value={sector} onChange={(e) => setSector(e.target.value)} className={field}>
