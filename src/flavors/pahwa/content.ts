@@ -58,7 +58,7 @@ export const QUOTES = [
 ];
 
 export const CATEGORIES = [
-  { name: 'Plot', number: '01', image: images.categories.plot, desc: 'Prime residential and commercial plots in Panchkula\u2019s most sought-after sectors.' },
+  { name: 'Plot', number: '01', image: images.categories.plot, desc: 'Prime residential and commercial plots in Faridabad\u2019s most sought-after sectors.' },
   { name: 'Builder Floor', number: '02', image: images.categories.builderFloor, desc: 'Spacious independent floors with privacy, parking, and modern design.' },
   { name: 'Flat', number: '03', image: images.categories.flat, desc: 'Premium apartments in gated communities with world-class amenities.' },
   { name: 'Commercial', number: '04', image: images.categories.commercial, desc: 'Showrooms, office spaces, and SCO plots on high-footfall corridors.' },
