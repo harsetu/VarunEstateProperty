@@ -86,8 +86,16 @@ export default function Navbar() {
           }`}
         >
         <nav className="max-w-[1280px] mx-auto px-5 lg:px-8 h-[72px] flex items-center justify-between">
-          <Link to="/" aria-label={t('nav.homeAria', { company: CONTACT.company })}>
-            <Logo />
+          <Link to="/" aria-label={t('nav.homeAria', { company: CONTACT.company })} className="flex items-center gap-3 min-w-0">
+            <Logo className="shrink-0" />
+            {CONTACT.ribbonName && (
+              <span className={`flex flex-col leading-tight min-w-0 ${onDark ? 'text-gold-light' : 'text-gold'}`}>
+                <span className="font-display font-semibold text-[0.9375rem] sm:text-lg truncate">{CONTACT.ribbonName}</span>
+                {CONTACT.registration && (
+                  <span className="text-[0.625rem] sm:text-xs truncate opacity-90">{CONTACT.registration}</span>
+                )}
+              </span>
+            )}
           </Link>
 
           <div className="hidden md:flex items-center gap-8">

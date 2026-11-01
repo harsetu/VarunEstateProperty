@@ -17,16 +17,14 @@ export default function HeroCarousel() {
   const navigate = useNavigate();
   const { sectors } = useHomeViewModel();
   const [at, setAt] = useState(0);
-  const [paused, setPaused] = useState(false);
   const [sector, setSector] = useState('All');
   const [type, setType] = useState('All');
   const go = (d: number) => setAt((i) => (i + d + HERO_SLIDES.length) % HERO_SLIDES.length);
 
   useEffect(() => {
-    if (paused || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const id = setInterval(() => setAt((i) => (i + 1) % HERO_SLIDES.length), SLIDE_MS);
     return () => clearInterval(id);
-  }, [paused]);
+  }, []);
 
   const search = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,8 +38,6 @@ export default function HeroCarousel() {
   return (
     <section
       className="relative flex flex-col md:block md:h-[100svh] md:min-h-[600px] overflow-hidden md:rounded-b-[2.5rem] bg-night text-white"
-      onPointerEnter={() => setPaused(true)}
-      onPointerLeave={() => setPaused(false)}
     >
       {/* Photos are always shown whole (a blurred copy fills any gap), so nothing is cropped on any screen */}
       <div className="relative aspect-[4/3] md:aspect-auto md:absolute md:inset-0">

@@ -6,7 +6,6 @@ import Categories from '@/features/home/ui/Categories';
 import NewProjects from '@/features/home/ui/NewProjects';
 import WhyUs from '@/features/home/ui/WhyUs';
 import Awards from '@/features/home/ui/Awards';
-import AwardsMore from '@/features/home/ui/AwardsMore';
 import Reviews from '@/features/home/ui/Reviews';
 import CtaFooter from '@/features/home/ui/CtaFooter';
 
@@ -19,7 +18,6 @@ export default function Home() {
       <NewProjects />
       <Reviews />
       <Awards />
-      <AwardsMore />
       <WhyUs />
       <CtaFooter />
     </>

@@ -10,6 +10,9 @@ export interface Contact {
   phones: { display: string; href: string }[];
   phoneDisplay: string;
   phoneHref: string;
+  /** Shown in the top ribbon, e.g. the full firm name and its registration number. */
+  ribbonName?: string;
+  registration?: string;
   email: string;
   whatsapp: string;
 }

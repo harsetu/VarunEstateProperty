@@ -12,7 +12,15 @@ export default function Footer() {
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-14 lg:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           <div>
-            <Logo className="mb-5" />
+            <div className="flex items-center gap-3 mb-5">
+              <Logo className="shrink-0" />
+              {CONTACT.ribbonName && (
+                <span className="flex flex-col leading-tight min-w-0 text-gold">
+                  <span className="font-display font-semibold text-lg">{CONTACT.ribbonName}</span>
+                  {CONTACT.registration && <span className="text-xs opacity-90 break-all">{CONTACT.registration}</span>}
+                </span>
+              )}
+            </div>
             <p className="text-ash text-sm leading-relaxed">
               {t('footer.blurb', { market: flavor.market })}
             </p>

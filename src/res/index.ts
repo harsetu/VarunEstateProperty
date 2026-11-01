@@ -1,8 +1,8 @@
 // Bundled images. Import from here instead of hard-coding URLs:  import { images } from '@/res';
-import plot from './images/categories/plot.jpg';
-import builderFloor from './images/categories/builder-floor.jpg';
+import plot from './images/categories/plot.jpeg';
+import builderFloor from './images/categories/builder-floor.jpeg';
 import flat from './images/categories/flat.jpg';
-import commercial from './images/categories/commercial.jpg';
+import commercial from './images/categories/commercial.jpeg';
 import heroPoster from './images/hero/hero-poster.jpg';
 import quotePoster from './images/hero/quote-poster.jpg';
 import rworldLogo from './images/logos/rworld.jpg';

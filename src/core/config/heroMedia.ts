@@ -7,7 +7,7 @@
 export const HERO_VIDEO_LOCAL = '/videos/hero.mp4';
 
 /** THEME3 shows these as a carousel; the photos live in `public/`. */
-const SLIDE_IMAGES = ['/caraousal.jpeg', '/caraousal1.jpg', '/caraousal2.jpg', '/caraousal3.jpg', '/caraousal4.webp'];
+const SLIDE_IMAGES = ['/caraousal.jpeg', '/caraousal1.jpg', '/caraousal3.jpg', '/caraousal2.jpg', '/caraousal4.jpg'];
 
 export const HERO_SLIDES: { image: string; titleKey: string; subtitleKey: string }[] = SLIDE_IMAGES.map((image, i) => ({
   image,
