@@ -2,6 +2,7 @@ import { Link, NavLink, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { ArrowLeft, Home, LayoutList, PlusCircle, Star, Users, User, Settings } from 'lucide-react';
 import { CONTACT } from '@/core/config/contact';
 import { useAdminAuth } from '@/features/admin/viewmodel/AdminAuthProvider';
+import InstallAppButton from '@/features/admin/ui/InstallAppButton';
 import { t } from '@/core/utils/i18n';
 
 const MENU = [
@@ -64,6 +65,7 @@ export default function AdminLayout() {
       <main className="pt-14 pb-20 lg:pb-8 lg:pl-60">
         <div className="max-w-[1100px] mx-auto px-4 lg:px-8 py-6">
           <Outlet />
+          <InstallAppButton className="mt-8 lg:hidden" />
         </div>
       </main>
 

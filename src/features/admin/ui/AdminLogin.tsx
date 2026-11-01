@@ -1,6 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { CONTACT } from '@/core/config/contact';
 import { useAdminLoginViewModel } from '@/features/admin/viewmodel/useAdminLoginViewModel';
+import InstallAppButton from '@/features/admin/ui/InstallAppButton';
 import { t } from '@/core/utils/i18n';
 
 const input = 'w-full rounded-xl border border-fg/15 bg-white px-4 py-3 text-fg focus:outline-none focus:border-gold';
@@ -33,6 +34,7 @@ export default function AdminLogin() {
             </button>
           </form>
         )}
+        <InstallAppButton className="mt-6 pt-5 border-t border-fg/10" />
       </div>
     </div>
   );

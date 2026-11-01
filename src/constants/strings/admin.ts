@@ -1,5 +1,8 @@
 // Admin panel: layout, login, home, listings, publish form, notes, profile.
 export const admin = {
+  'admin.install': 'Install app',
+  'admin.install.ios1': 'Tap',
+  'admin.install.ios2': 'in Safari, then "Add to Home Screen".',
   'admin.menu.home': 'Home',
   'admin.menu.listings': 'Listings',
   'admin.menu.publish': 'Publish',
