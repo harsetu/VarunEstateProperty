@@ -16,7 +16,13 @@ export default defineConfig(({ mode }) => {
     },
   },
   // In dev, /api is proxied to the backend so no CORS setup is needed
-  server: env.VITE_API_BASE_URL ? { proxy: { '/api': { target: env.VITE_API_BASE_URL, changeOrigin: true } } } : undefined,
+  server: {
+    proxy: {
+      ...(env.VITE_API_BASE_URL ? { '/api': { target: env.VITE_API_BASE_URL, changeOrigin: true } } : {}),
+      // Chat inbox (third party): same-origin in dev so the browser doesn't block it
+      ...(env.VITE_BABBLER_BASE_URL ? { '/babbler': { target: new URL(env.VITE_BABBLER_BASE_URL).origin, changeOrigin: true, rewrite: (p: string) => p.replace(/^\/babbler/, '') } } : {}),
+    },
+  },
   optimizeDeps: {
     exclude: ['lucide-react'],
   },

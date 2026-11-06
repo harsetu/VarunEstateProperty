@@ -1,5 +1,6 @@
 import type { Property } from '@/features/properties/model/property';
 import type { ThemeId } from '@/core/theme/themes';
+import type { Conversation, ConversationPage, MessagePage } from '@/features/admin/model/inbox';
 import type { Dashboard, Profile } from '@/features/admin/model/admin';
 
 export type { AdminUser } from '@/core/network/session';
@@ -33,6 +34,12 @@ export interface UserRepository {
   uploadAttachment(file: File): Promise<MailAttachment>;
   sendEmail(mail: BroadcastEmail): Promise<number | undefined>;
 
+}
+
+export interface InboxRepository {
+  conversations(page: number): Promise<ConversationPage>;
+  /** One page of a conversation's messages, 1 = the most recent. */
+  history(contact: Conversation, page: number): Promise<MessagePage>;
 }
 
 export interface ProfileRepository {

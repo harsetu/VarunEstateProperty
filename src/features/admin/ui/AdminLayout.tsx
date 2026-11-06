@@ -1,5 +1,5 @@
 import { Link, NavLink, Navigate, Outlet, useLocation } from 'react-router-dom';
-import { ArrowLeft, Home, LayoutList, PlusCircle, Star, Users, User, Settings } from 'lucide-react';
+import { ArrowLeft, Home, LayoutList, PlusCircle, Star, Users, User, Settings, Inbox } from 'lucide-react';
 import { CONTACT } from '@/core/config/contact';
 import { useAdminAuth } from '@/features/admin/viewmodel/AdminAuthProvider';
 import InstallAppButton from '@/features/admin/ui/InstallAppButton';
@@ -9,11 +9,15 @@ const MENU = [
   { to: '/admin/home', label: t('admin.menu.home'), icon: Home },
   { to: '/admin/listings', label: t('admin.menu.listings'), icon: LayoutList },
   { to: '/admin/publish', label: t('admin.menu.publish'), icon: PlusCircle },
+  { to: '/admin/inbox', label: t('admin.menu.inbox'), icon: Inbox },
   { to: '/admin/reviews', label: t('admin.menu.reviews'), icon: Star },
   { to: '/admin/users', label: t('admin.menu.users'), icon: Users },
   { to: '/admin/profile', label: t('admin.menu.profile'), icon: User },
   { to: '/admin/settings', label: t('admin.menu.settings'), icon: Settings },
 ];
+
+// Profile is reached from the avatar in the app bar, so the phone's bottom bar skips it
+const BOTTOM_MENU = MENU.filter((m) => m.to !== '/admin/profile');
 
 const titleFor = (path: string) => MENU.find((m) => path.startsWith(m.to))?.label ?? t('admin.title');
 
@@ -71,7 +75,7 @@ export default function AdminLayout() {
 
       {/* Mobile bottom navigation */}
       <nav className="lg:hidden fixed inset-x-0 bottom-0 z-30 h-16 bg-white border-t border-fg/10 grid grid-cols-7">
-        {MENU.map(({ to, label, icon: Icon }) => (
+        {BOTTOM_MENU.map(({ to, label, icon: Icon }) => (
           <NavLink
             key={to}
             to={to}

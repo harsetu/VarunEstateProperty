@@ -25,7 +25,9 @@ import AdminHome from '@/features/admin/ui/AdminHome';
 import AdminPublish from '@/features/admin/ui/AdminPublish';
 import AdminUsers from '@/features/admin/ui/AdminUsers';
 import AdminReviews from '@/features/admin/ui/AdminReviews';
+import AdminInbox from '@/features/admin/ui/AdminInbox';
 import AdminSettings from '@/features/admin/ui/AdminSettings';
+import LaunchPage from '@/features/launch/ui/LaunchPage';
 import AdminProfile from '@/features/admin/ui/AdminProfile';
 import ThemeProvider from '@/core/theme/ThemeProvider';
 import { analytics } from '@/core/analytics/analytics';
@@ -61,7 +63,9 @@ function PageTransition() {
 
 // Public chrome is hidden on /admin pages
 function SiteShell() {
-  const isAdmin = useLocation().pathname.startsWith('/admin');
+  const { pathname } = useLocation();
+  const isAdmin = pathname.startsWith('/admin');
+  if (pathname === '/launch') return <LaunchPage />;
   if (isAdmin) {
     return (
       <Routes>
@@ -72,6 +76,7 @@ function SiteShell() {
           <Route path="/admin/publish" element={<AdminPublish />} />
           <Route path="/admin/publish/:id" element={<AdminPublish />} />
           <Route path="/admin/reviews" element={<AdminReviews />} />
+          <Route path="/admin/inbox" element={<AdminInbox />} />
           <Route path="/admin/users" element={<AdminUsers />} />
           <Route path="/admin/profile" element={<AdminProfile />} />
           <Route path="/admin/settings" element={<AdminSettings />} />

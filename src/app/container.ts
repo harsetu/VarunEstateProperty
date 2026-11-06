@@ -1,6 +1,6 @@
 import flavor from '@/flavors';
 import type { PropertyRepository } from '@/features/properties/repository/PropertyRepository';
-import type { AuthService, ListingAdminRepository, DashboardRepository, UserRepository, ProfileRepository, ThemeRepository } from '@/features/admin/repository/AdminRepositories';
+import type { AuthService, ListingAdminRepository, DashboardRepository, UserRepository, ProfileRepository, ThemeRepository, InboxRepository } from '@/features/admin/repository/AdminRepositories';
 import { StaticPropertyRepository } from '@/features/properties/repository/StaticPropertyRepository';
 import { ApiPropertyRepository } from '@/features/properties/repository/ApiPropertyRepository';
 import { FlavorHomeRepository } from '@/features/home/data/FlavorHomeRepository';
@@ -16,6 +16,7 @@ import { NominatimLocationSearch } from '@/features/admin/repository/NominatimLo
 import type { ReviewRepository } from '@/features/reviews/repository/ReviewRepository';
 import { ApiReviewRepository } from '@/features/reviews/repository/ApiReviewRepository';
 import { ApiThemeRepository } from '@/features/admin/repository/ApiThemeRepository';
+import { BabblerInboxRepository } from '@/features/admin/repository/BabblerInboxRepository';
 import { ApiUserRepository } from '@/features/admin/repository/ApiUserRepository';
 
 // Composition root: the only place that knows which implementations back the app.
@@ -49,3 +50,9 @@ export const homeRepository: HomeRepository = new FlavorHomeRepository(flavor);
 export const contactRepository: ContactRepository | null = apiRoot ? new ApiContactRepository(apiRoot) : null;
 /** Address lookup used to fill a listing's coordinates. */
 export const locationSearch: LocationSearchRepository = new NominatimLocationSearch(flavor.geo);
+/** Third-party chat inbox; null until VITE_BABBLER_API_KEY is set. In dev it goes through the /babbler proxy (vite.config.ts) to avoid CORS. */
+const babblerBase = (import.meta.env.VITE_BABBLER_BASE_URL || '').replace(/\/$/, '');
+const babblerKey = import.meta.env.VITE_BABBLER_API_KEY || '';
+export const inboxRepository: InboxRepository | null = babblerBase && babblerKey
+  ? new BabblerInboxRepository(import.meta.env.DEV ? `/babbler${new URL(babblerBase).pathname.replace(/\/$/, '')}` : babblerBase, babblerKey, import.meta.env.VITE_BABBLER_API_KEY_HEADER || 'X-API-Key')
+  : null;
