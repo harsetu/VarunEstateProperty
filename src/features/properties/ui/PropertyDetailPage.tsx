@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
+import PriceText from '@/features/properties/ui/PriceText';
 import { useState, useEffect } from 'react';
 import { usePropertyDetailViewModel } from '@/features/properties/viewmodel/usePropertyDetailViewModel';
 import type { NearbyCategory } from '@/features/properties/model/property';
@@ -272,7 +273,7 @@ export default function PropertyDetail() {
                   {t('detail.price')}
                   {isPriceRange(property.priceValue, property.priceMax) && <span className="px-2 py-0.5 normal-case rounded-full bg-gold/10 text-gold text-[0.6875rem] font-semibold uppercase tracking-wide">{t('price.approx')}</span>}
                 </p>
-                <p className={`font-display font-semibold text-gold ${isPriceRange(property.priceValue, property.priceMax) ? 'text-3xl' : 'text-4xl'} ${property.priceNegotiable ? 'mb-1' : 'mb-6'}`}>{property.price}</p>
+                <p className={`font-display font-semibold text-gold ${isPriceRange(property.priceValue, property.priceMax) ? 'text-3xl' : 'text-4xl'} ${property.priceNegotiable ? 'mb-1' : 'mb-6'}`}><PriceText price={property.price} /></p>
                 {property.priceNegotiable && <p className="text-ash text-sm mb-6">{t('detail.negotiable')}</p>}
 
                 <div className="space-y-3 mb-6 pb-6 border-b border-fg/8">
@@ -347,7 +348,7 @@ export default function PropertyDetail() {
       <div className="lg:hidden fixed bottom-0 inset-x-0 z-[5500] bg-white/95 backdrop-blur border-t border-fg/10 px-4 py-3 flex items-center gap-3">
         <div className="min-w-0">
           <p className="text-[0.6875rem] text-ash-dark leading-none">{t('detail.price')}</p>
-          <p className="font-display font-semibold text-fg text-lg leading-tight truncate">{property.price}</p>
+          <p className="font-display font-semibold text-fg text-lg leading-tight truncate"><PriceText price={property.price} /></p>
         </div>
         <a href={CONTACT.phoneHref} aria-label={t('detail.call')} className="ml-auto w-11 h-11 rounded-full border border-fg/15 flex items-center justify-center text-fg shrink-0">
           <Phone size={18} />

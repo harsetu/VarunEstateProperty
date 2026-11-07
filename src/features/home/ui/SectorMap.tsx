@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PriceText from '@/features/properties/ui/PriceText';
 import { Link } from 'react-router-dom';
 import { ArrowRight, MapPin, MessageCircle } from 'lucide-react';
 import { useHomeViewModel } from '@/features/home/viewmodel/useHomeViewModel';
@@ -126,7 +127,7 @@ export default function SectorMap() {
                         <span className="block text-sm font-semibold text-fg truncate group-hover:text-gold">{p.title}</span>
                         <span className="block text-xs text-ash">{p.area}</span>
                       </span>
-                      <span className="font-display font-semibold text-fg">{p.price}</span>
+                      <PriceText price={p.price} className="font-display font-semibold text-fg" />
                     </Link>
                   ))}
                 </div>

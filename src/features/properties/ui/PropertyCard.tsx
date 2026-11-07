@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import PriceText from '@/features/properties/ui/PriceText';
 import { Link } from 'react-router-dom';
 import { Bed, Bath, Maximize, MapPin, ArrowRight } from 'lucide-react';
 import type { Property } from '@/features/properties/model/property';
@@ -97,7 +98,7 @@ export default function PropertyCard({ property, index = 0 }: { property: Proper
             <div className="mt-auto flex items-center justify-between [transform:translateZ(15px)]">
               <span className="min-w-0">
                 {isPriceRange(property.priceValue, property.priceMax) && <span className="block mb-1"><span className="px-2 py-0.5 rounded-full bg-gold/10 text-gold text-[0.6875rem] font-semibold uppercase tracking-wide">{t('price.approx')}</span></span>}
-                <span className={`block font-display font-semibold text-fg ${isPriceRange(property.priceValue, property.priceMax) ? 'text-lg' : 'text-2xl'}`}>{property.price}</span>
+                <PriceText price={property.price} className={`block font-display font-semibold text-fg ${isPriceRange(property.priceValue, property.priceMax) ? 'text-lg' : 'text-2xl'}`} />
               </span>
               <span className="flex items-center gap-1 text-sm font-semibold text-gold">
                 {t('card.viewDetails')} <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />

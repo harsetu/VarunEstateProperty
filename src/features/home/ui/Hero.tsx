@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import PriceText from '@/features/properties/ui/PriceText';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, ShieldCheck, Star, ArrowUpRight, Home as HomeIcon } from 'lucide-react';
 import { TYPES } from '@/features/properties/data/propertyOptions';
@@ -240,7 +241,7 @@ export default function Hero() {
             <div className="min-w-0 flex-1">
               <p className="text-[0.6875rem] font-semibold uppercase tracking-wider text-emerald-600">{t('hero.justListed')}</p>
               <p className="text-sm font-semibold text-fg truncate">{JUST_LISTED.title}</p>
-              <p className="text-sm font-display font-semibold text-gold">{JUST_LISTED.price}</p>
+              <p className="text-sm font-display font-semibold text-gold"><PriceText price={JUST_LISTED.price} /></p>
             </div>
             <ArrowUpRight size={18} className="text-ash group-hover:text-gold transition-colors shrink-0" />
           </Link>}
