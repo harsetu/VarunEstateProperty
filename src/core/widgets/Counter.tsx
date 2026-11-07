@@ -1,39 +1,49 @@
 import { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(ScrollTrigger);
+const DURATION_MS = 2000;
 
+/** Counts up to `value` the first time it scrolls into view. */
 export default function Counter({ value, suffix = '', label, index }: { value: number; suffix?: string; label: string; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const [display, setDisplay] = useState(0);
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
       setDisplay(value);
       return;
     }
 
-    const el = ref.current;
-    if (!el) return;
+    let raf = 0;
+    let delay = 0;
+    const run = () => {
+      const start = performance.now();
+      const step = (now: number) => {
+        const p = Math.min((now - start) / DURATION_MS, 1);
+        setDisplay(Math.round(value * (1 - Math.pow(1 - p, 3))));
+        if (p < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    };
 
-    const ctx = gsap.context(() => {
-      const obj = { val: 0 };
-      gsap.to(obj, {
-        val: value,
-        duration: 2,
-        ease: 'power2.out',
-        delay: index * 0.15,
-        onUpdate: () => setDisplay(Math.round(obj.val)),
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 90%',
-          once: true,
-        },
-      });
-    }, el);
+    // IntersectionObserver keeps working when images or sections above change the page height, which broke the old scroll trigger
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        io.disconnect();
+        delay = window.setTimeout(run, index * 150);
+      },
+      { threshold: 0.2 },
+    );
+    io.observe(el);
 
-    return () => ctx.revert();
+    return () => {
+      io.disconnect();
+      clearTimeout(delay);
+      cancelAnimationFrame(raf);
+      setDisplay(value);
+    };
   }, [value, index]);
 
   return (
