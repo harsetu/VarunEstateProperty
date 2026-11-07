@@ -10,6 +10,8 @@ import { ApiListingAdmin } from '@/features/admin/repository/ApiListingAdmin';
 import { ApiDashboardRepository } from '@/features/admin/repository/ApiDashboardRepository';
 import { ApiProfileRepository } from '@/features/admin/repository/ApiProfileRepository';
 import type { ContactRepository } from '@/features/contact/repository/ContactRepository';
+import { WhatsappContactRepository } from '@/features/contact/repository/WhatsappContactRepository';
+import { CompositeContactRepository } from '@/features/contact/repository/CompositeContactRepository';
 import { ApiContactRepository } from '@/features/contact/repository/ApiContactRepository';
 import type { LocationSearchRepository } from '@/features/admin/repository/LocationSearchRepository';
 import { NominatimLocationSearch } from '@/features/admin/repository/NominatimLocationSearch';
@@ -46,13 +48,28 @@ export const userRepository: UserRepository | null = apiRoot ? new ApiUserReposi
 export const reviewRepository: ReviewRepository | null = apiRoot ? new ApiReviewRepository(apiRoot) : null;
 export const dashboardRepository: DashboardRepository | null = apiRoot ? new ApiDashboardRepository(apiRoot) : null;
 export const homeRepository: HomeRepository = new FlavorHomeRepository(flavor);
-/** null until an API is configured; the contact form then only confirms on screen. */
-export const contactRepository: ContactRepository | null = apiRoot ? new ApiContactRepository(apiRoot) : null;
 /** Address lookup used to fill a listing's coordinates. */
 export const locationSearch: LocationSearchRepository = new NominatimLocationSearch(flavor.geo);
 /** Third-party chat inbox; null until VITE_BABBLER_API_KEY is set. In dev it goes through the /babbler proxy (vite.config.ts) to avoid CORS. */
 const babblerBase = (import.meta.env.VITE_BABBLER_BASE_URL || '').replace(/\/$/, '');
 const babblerKey = import.meta.env.VITE_BABBLER_API_KEY || '';
 export const inboxRepository: InboxRepository | null = babblerBase && babblerKey
-  ? new BabblerInboxRepository(import.meta.env.DEV ? `/babbler${new URL(babblerBase).pathname.replace(/\/$/, '')}` : babblerBase, babblerKey, import.meta.env.VITE_BABBLER_API_KEY_HEADER || 'X-API-Key')
+  ? new BabblerInboxRepository(import.meta.env.DEV ? `/babbler${new URL(babblerBase).pathname.replace(/\/$/, '')}` : babblerBase, babblerKey, import.meta.env.VITE_BABBLER_API_KEY_HEADER || 'API-KEY')
   : null;
+
+/** Enquiries go by email (backend) and WhatsApp (chat service), whichever are configured; null means the form only confirms on screen. */
+const contactChannels: ContactRepository[] = [
+  ...(apiRoot ? [new ApiContactRepository(apiRoot)] : []),
+  ...(babblerBase && babblerKey && import.meta.env.VITE_BABBLER_SENDER_NO
+    ? [new WhatsappContactRepository({
+        baseUrl: import.meta.env.DEV ? `/babbler${new URL(babblerBase).pathname.replace(/\/$/, '')}` : babblerBase,
+        apiKey: babblerKey,
+        keyHeader: import.meta.env.VITE_BABBLER_API_KEY_HEADER || 'API-KEY',
+        senderNo: import.meta.env.VITE_BABBLER_SENDER_NO,
+        recipientNo: import.meta.env.VITE_BABBLER_LEAD_NO || `+${flavor.contact.whatsapp}`,
+        recipientName: flavor.contact.person,
+        contactId: import.meta.env.VITE_BABBLER_LEAD_CONTACT_ID || undefined,
+      })]
+    : []),
+];
+export const contactRepository: ContactRepository | null = contactChannels.length ? new CompositeContactRepository(contactChannels) : null;
