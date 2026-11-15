@@ -59,7 +59,7 @@ export const extractList = (body: unknown): Raw[] => {
 export const toConversation = (r: Raw): Conversation => {
   const phone = str(pick(r, ['phone', 'phone_number', 'partner_phone_no', 'mobile', 'wa_id', 'contact_number']));
   return {
-    id: str(pick(r, ['id', 'contact_id', '_id', 'chat_id', 'uuid'])) ?? phone ?? '',
+    id: str(pick(r, ['contact_id', 'id', '_id', 'uuid'])) ?? phone ?? '',
     name: str(pick(r, ['name', 'contact_name', 'display_name', 'full_name', 'profile_name'])) ?? phone ?? '—',
     phone,
     lastMessage: textOf(pick(r, ['last_message', 'latest_message', 'last_message_text', 'last_message_body'])),

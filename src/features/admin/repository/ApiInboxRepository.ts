@@ -29,7 +29,7 @@ export class ApiInboxRepository implements InboxRepository {
     return { items, hasMore: Number.isFinite(totalPages) && totalPages > 0 ? page < totalPages : items.length >= PAGE_SIZE };
   };
 
-  /** NOTE: path assumed to mirror the list route — GET {api}/babbler/chat?contact_id=…&page=…&page_size=…&phone_no_id=… */
+  /** GET {api}/babbler/chat?contact_id=…&phone_no_id=…&page=…&page_size=… — both ids must come from the same contact in the list (else 404). */
   history = async (contact: Conversation, page: number): Promise<MessagePage> => {
     const body = await this.get('/babbler/chat', {
       contact_id: contact.id, page, page_size: PAGE_SIZE, ...(contact.phoneNoId ? { phone_no_id: contact.phoneNoId } : {}),
