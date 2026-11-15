@@ -1,41 +1,37 @@
 import type { InboxRepository } from '@/features/admin/repository/AdminRepositories';
 import { extractList, oldestFirst, toConversation, toMessage, type Conversation, type ConversationPage, type MessagePage } from '@/features/admin/model/inbox';
-import { HttpError } from '@/core/network/tokens';
+import { createAuthorizedFetch } from '@/core/network/authorizedFetch';
 
 const PAGE_SIZE = 25;
-/** Third-party chat service (Babbler); `baseUrl` is VITE_BABBLER_BASE_URL and its API key goes in a request header. */
 
-export class BabblerInboxRepository implements InboxRepository {
-  constructor(
-    private readonly baseUrl: string,
-    private readonly apiKey: string,
-    private readonly keyHeader: string,
-  ) {}
+/**
+ * Inbox through our own backend, which relays the chat service (the admin's login token is used, so no key lives in the site):
+ * GET {api}/babbler/chat/active/contact -> { status, message, data: { page, total_pages, data: [contacts] } }
+ */
+export class ApiInboxRepository implements InboxRepository {
+  private readonly send: ReturnType<typeof createAuthorizedFetch>;
+
+  constructor(apiRoot: string) {
+    this.send = createAuthorizedFetch(apiRoot);
+  }
 
   private get = async (path: string, params: Record<string, string | number | boolean>): Promise<unknown> => {
     const qs = new URLSearchParams(Object.entries(params).map(([k, v]) => [k, String(v)]));
-    const res = await fetch(`${this.baseUrl}${path}?${qs}`, {
-      headers: { Accept: 'application/json, text/plain, */*', [this.keyHeader]: this.apiKey },
-    });
-    if (!res.ok) {
-      let message = `Inbox request failed (${res.status}).`;
-      try { message = ((await res.json()) as { message?: string }).message || message; } catch { /* keep default */ }
-      throw new HttpError(message, res.status);
-    }
-    return res.json();
+    return (await this.send(`${path}?${qs}`)).json();
   };
 
   conversations = async (page: number): Promise<ConversationPage> => {
-    const body = await this.get('/chat/active/contact', {
+    const body = await this.get('/babbler/chat/active/contact', {
       page, page_size: PAGE_SIZE, sort_order: 'desc', archive_status: 'active', unified_inbox: true,
     });
     const items = extractList(body).map(toConversation).filter((c) => c.id);
-    return { items, hasMore: items.length >= PAGE_SIZE };
+    const totalPages = Number((body as { data?: { total_pages?: number } })?.data?.total_pages);
+    return { items, hasMore: Number.isFinite(totalPages) && totalPages > 0 ? page < totalPages : items.length >= PAGE_SIZE };
   };
 
-  /** GET /chat?contact_id=…&page=…&page_size=…&phone_no_id=… -> { page, page_size, chat: [...] } */
+  /** NOTE: path assumed to mirror the list route — GET {api}/babbler/chat?contact_id=…&page=…&page_size=…&phone_no_id=… */
   history = async (contact: Conversation, page: number): Promise<MessagePage> => {
-    const body = await this.get('/chat', {
+    const body = await this.get('/babbler/chat', {
       contact_id: contact.id, page, page_size: PAGE_SIZE, ...(contact.phoneNoId ? { phone_no_id: contact.phoneNoId } : {}),
     });
     const raw = extractList(body);

@@ -321,7 +321,7 @@ export const admin = {
   'profile.saveFailed': 'Could not save',
 
   'inbox.title': 'Inbox',
-  'inbox.notSetUp': "Inbox isn't set up yet. Add VITE_BABBLER_API_KEY to this site's .env.<flavor> file (or the build settings) and rebuild.",
+  'inbox.notSetUp': "Inbox isn't set up yet. Set VITE_API_BASE_URL (server address) in this site's .env.<flavor> file and rebuild.",
   'inbox.search': 'Search chats',
   'inbox.refresh': 'Refresh',
   'inbox.loading': 'Loading…',
@@ -333,6 +333,6 @@ export const admin = {
   'inbox.pick': 'Select a conversation to see its messages.',
   'inbox.noMessages': 'No messages in this conversation.',
   'inbox.back': 'Back to chats',
-  'inbox.denied': 'The chat service rejected the API key.',
+  'inbox.denied': "You don't have access to the inbox. Sign in again.",
   'inbox.loadFailed': 'Could not load the inbox.',
 } as const;

@@ -18,7 +18,7 @@ import { NominatimLocationSearch } from '@/features/admin/repository/NominatimLo
 import type { ReviewRepository } from '@/features/reviews/repository/ReviewRepository';
 import { ApiReviewRepository } from '@/features/reviews/repository/ApiReviewRepository';
 import { ApiThemeRepository } from '@/features/admin/repository/ApiThemeRepository';
-import { BabblerInboxRepository } from '@/features/admin/repository/BabblerInboxRepository';
+import { ApiInboxRepository } from '@/features/admin/repository/ApiInboxRepository';
 import { ApiUserRepository } from '@/features/admin/repository/ApiUserRepository';
 
 // Composition root: the only place that knows which implementations back the app.
@@ -50,12 +50,12 @@ export const dashboardRepository: DashboardRepository | null = apiRoot ? new Api
 export const homeRepository: HomeRepository = new FlavorHomeRepository(flavor);
 /** Address lookup used to fill a listing's coordinates. */
 export const locationSearch: LocationSearchRepository = new NominatimLocationSearch(flavor.geo);
-/** Third-party chat inbox; null until VITE_BABBLER_API_KEY is set. In dev it goes through the /babbler proxy (vite.config.ts) to avoid CORS. */
+/** Chat inbox, relayed by our backend (needs the admin login); null until an API is configured. */
+export const inboxRepository: InboxRepository | null = apiRoot ? new ApiInboxRepository(apiRoot) : null;
+
+/** Chat service used directly for WhatsApp enquiries from the contact form. In dev it goes through the /babbler proxy (vite.config.ts) to avoid CORS. */
 const babblerBase = (import.meta.env.VITE_BABBLER_BASE_URL || '').replace(/\/$/, '');
 const babblerKey = import.meta.env.VITE_BABBLER_API_KEY || '';
-export const inboxRepository: InboxRepository | null = babblerBase && babblerKey
-  ? new BabblerInboxRepository(import.meta.env.DEV ? `/babbler${new URL(babblerBase).pathname.replace(/\/$/, '')}` : babblerBase, babblerKey, import.meta.env.VITE_BABBLER_API_KEY_HEADER || 'API-KEY')
-  : null;
 
 /** Enquiries go by email (backend) and WhatsApp (chat service), whichever are configured; null means the form only confirms on screen. */
 const contactChannels: ContactRepository[] = [
