@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { usePropertyDetailViewModel } from '@/features/properties/viewmodel/usePropertyDetailViewModel';
 import type { NearbyCategory } from '@/features/properties/model/property';
 import {
-  Bed, Bath, Maximize, MapPin, Share2, Check, CalendarCheck, Phone,
+  Bed, Bath, Maximize, MapPin, Share2, Check, CalendarCheck, Phone, ChevronLeft,
   PlayCircle, Video, LayoutGrid, GraduationCap, Hospital, ShoppingBag, TrainFront, Trees, MessageCircle,
 } from 'lucide-react';
 import SiteVisitModal from '@/features/properties/ui/SiteVisitModal';

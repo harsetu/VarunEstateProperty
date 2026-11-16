@@ -40,6 +40,7 @@ export interface InboxRepository {
   conversations(page: number): Promise<ConversationPage>;
   /** One page of a conversation's messages, 1 = the most recent. */
   history(contact: Conversation, page: number): Promise<MessagePage>;
+  markRead(messageId: string): Promise<void>;
 }
 
 export interface ProfileRepository {

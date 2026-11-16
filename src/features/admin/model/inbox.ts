@@ -8,14 +8,28 @@ export interface Conversation {
   channel?: string;
   /** The business number the chat runs on; the history call needs it. */
   phoneNoId?: string;
+  /** last_message_status: delivered / received (unread), read, meta_limit / failed (errors). */
+  lastStatus?: string;
 }
+
+/** A chat is unread while its last message is only "delivered" or "received". */
+export const isUnread = (c: Conversation): boolean =>
+  c.lastStatus ? c.lastStatus === 'delivered' || c.lastStatus === 'received' : c.unread > 0;
+
+export type MediaKind = 'image' | 'video' | 'audio' | 'document';
 
 export interface ChatMessage {
   id: string;
+  /** Text, or the caption of a file; for a template, its filled-in body. */
   text: string;
   at?: string;
   /** 'out' = sent by us, 'in' = sent by the customer. */
   direction: 'in' | 'out';
+  media?: { kind: MediaKind; url: string; fileName?: string; mime?: string };
+  /** Labels of a template's buttons. */
+  buttons?: string[];
+  /** Why WhatsApp did not deliver it, when it failed. */
+  failure?: string;
 }
 
 export interface ConversationPage {
@@ -67,24 +81,80 @@ export const toConversation = (r: Raw): Conversation => {
     unread: Number(pick(r, ['unread_count', 'unread', 'unread_messages']) ?? 0) || 0,
     channel: str(pick(r, ['channel', 'platform', 'source', 'channel_type'])),
     phoneNoId: str(pick(r, ['phone_no_id', 'phone_number_id'])),
+    lastStatus: str(pick(r, ['last_message_status']))?.toLowerCase(),
   };
 };
 
-/** A message is { type, body } (text) or another type such as image / document, shown as "[image]" with its caption. */
+const MEDIA_KINDS: Record<string, MediaKind> = { image: 'image', sticker: 'image', video: 'video', audio: 'audio', voice: 'audio', document: 'document' };
+const asRaw = (v: unknown): Raw | undefined => (typeof v === 'object' && v !== null && !Array.isArray(v) ? (v as Raw) : undefined);
+const asList = (v: unknown): Raw[] => (Array.isArray(v) ? (v.filter((x) => asRaw(x)) as Raw[]) : []);
+
+/** A template's header file (image / video / document) as it was actually sent, else the example it was designed with. */
+const templateHeader = (m: Raw, payload?: Raw): ChatMessage['media'] => {
+  const sent = asList(payload?.components).find((c) => str(c.type)?.toUpperCase() === 'HEADER');
+  const param = asList(sent?.parameters)[0];
+  const type = str(param?.type)?.toLowerCase();
+  if (param && type && MEDIA_KINDS[type]) {
+    const url = str(asRaw(param[type])?.link);
+    if (url) return { kind: MEDIA_KINDS[type], url, fileName: str(m.file_name) };
+  }
+  const header = asList(m.components).find((c) => str(c.type)?.toUpperCase() === 'HEADER');
+  const kind = MEDIA_KINDS[str(header?.format)?.toLowerCase() ?? ''];
+  const url = Array.isArray(asRaw(header?.example)?.header_handle) ? str((asRaw(header?.example)!.header_handle as unknown[])[0]) : undefined;
+  return kind && url ? { kind, url, fileName: str(m.file_name) } : undefined;
+};
+
+/** Values for {{1}}, {{2}} …: what was actually sent, else the template's own example (body_text, flat or nested). */
+const templateValues = (body: Raw | undefined, payload?: Raw): string[] => {
+  const sent = asList(asList(payload?.components).find((c) => str(c.type)?.toUpperCase() === 'BODY')?.parameters).map((p) => str(p.text) ?? '');
+  if (sent.some(Boolean)) return sent;
+  const example = asRaw(body?.example)?.body_text;
+  const list = Array.isArray(example) && Array.isArray(example[0]) ? example[0] : example;
+  return Array.isArray(list) ? list.map((v) => str(v) ?? '') : [];
+};
+
+/** Template body with each {{n}} replaced by value n. */
+const templateBody = (m: Raw, payload?: Raw): string => {
+  const body = asList(m.components).find((c) => str(c.type)?.toUpperCase() === 'BODY');
+  const values = templateValues(body, payload);
+  return (str(body?.text) ?? '').replace(/\{\{(\d+)\}\}/g, (all, n: string) => values[Number(n) - 1] || all);
+};
+
+const templateButtons = (m: Raw): string[] =>
+  asList(asList(m.components).find((c) => str(c.type)?.toUpperCase() === 'BUTTONS')?.buttons).map((b) => str(b.text) ?? '').filter(Boolean);
+
+/** One chat message: text, a file (image / pdf / video / audio) with optional caption, or a template with its header file and buttons. */
 export const toMessage = (r: Raw, i: number): ChatMessage => {
   const dir = str(pick(r, ['msg_direction', 'direction', 'message_direction', 'sender_type', 'sender', 'role']))?.toLowerCase();
   const out = r.from_me === true || r.is_outgoing === true || (!!dir && ['out', 'outbound', 'outgoing', 'agent', 'business', 'bot', 'assistant', 'user_sent'].includes(dir));
-  const m = typeof r.message === 'object' && r.message !== null ? (r.message as Raw) : undefined;
-  const type = str(m?.type);
-  const text = m
-    ? str(pick(m, ['body', 'text', 'caption'])) ?? (type && type !== 'text' ? `[${type}]` : '')
-    : textOf(pick(r, ['text', 'body', 'content', 'message', 'message_text'])) ?? '';
-  return {
+  const m = asRaw(r.message);
+  const type = (str(m?.type) ?? str(r.message_type) ?? 'text').toLowerCase();
+  const failed = asList(r.failure_reason)[0];
+  const base = {
     id: str(pick(r, ['_id', 'id', 'chat_id', 'message_id'])) ?? String(i),
-    text,
     at: str(pick(r, ['created_at', 'timestamp', 'sent_at', 'updated_at', 'time', 'date'])),
-    direction: out ? 'out' : 'in',
+    direction: (out ? 'out' : 'in') as 'in' | 'out',
+    failure: str(failed?.title) ?? str(failed?.message),
   };
+
+  if (m && type === 'template') {
+    const payload = asRaw(r.waba_template_payload);
+    return { ...base, text: templateBody(m, payload), media: templateHeader(m, payload), buttons: templateButtons(m) };
+  }
+  if (m && MEDIA_KINDS[type]) {
+    const url = str(m.media_url) ?? (typeof m.content === 'string' ? m.content : undefined);
+    const caption = str(m.caption) ?? textOf(m.content && typeof m.content === 'object' ? m.content : undefined) ?? '';
+    return {
+      ...base,
+      text: caption,
+      media: url ? { kind: MEDIA_KINDS[type], url, fileName: str(m.filename) ?? str(r.file_name), mime: str(m.mime_type) } : undefined,
+      ...(url ? {} : { text: caption || `[${type}]` }),
+    };
+  }
+  const text = m
+    ? textOf(pick(m, ['content', 'body', 'text', 'caption'])) ?? (type !== 'text' ? `[${type}]` : '')
+    : textOf(pick(r, ['text', 'body', 'content', 'message', 'message_text'])) ?? '';
+  return { ...base, text };
 };
 
 const timeOf = (m: ChatMessage): number => {

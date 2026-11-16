@@ -29,6 +29,12 @@ export class ApiInboxRepository implements InboxRepository {
     return { items, hasMore: Number.isFinite(totalPages) && totalPages > 0 ? page < totalPages : items.length >= PAGE_SIZE };
   };
 
+  /** PATCH {api}/babbler/message/mark-read?babbler_message_id=…&show_typing_indicator=false */
+  markRead = async (messageId: string): Promise<void> => {
+    const qs = new URLSearchParams({ babbler_message_id: messageId, show_typing_indicator: 'false' });
+    await this.send(`/babbler/message/mark-read?${qs}`, { method: 'PATCH' });
+  };
+
   /** GET {api}/babbler/chat?contact_id=…&phone_no_id=…&page=…&page_size=… — both ids must come from the same contact in the list (else 404). */
   history = async (contact: Conversation, page: number): Promise<MessagePage> => {
     const body = await this.get('/babbler/chat', {

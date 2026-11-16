@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { inboxRepository } from '@/app/container';
-import type { ChatMessage, Conversation } from '@/features/admin/model/inbox';
+import { isUnread, type ChatMessage, type Conversation } from '@/features/admin/model/inbox';
 import { HttpError } from '@/core/network/tokens';
 import { t } from '@/core/utils/i18n';
 
@@ -58,6 +58,18 @@ export function useInboxViewModel() {
     }
   };
 
+  /** Opening an unread chat tells the chat service its newest customer message was read, then clears the red dot. */
+  const markSeen = (c: Conversation, history: ChatMessage[]) => {
+    const latest = [...history].reverse().find((m) => m.direction === 'in');
+    if (!inboxRepository || !isUnread(c) || !latest) return;
+    inboxRepository.markRead(latest.id)
+      .then(() => {
+        setItems((all) => all.map((x) => (x.id === c.id ? { ...x, lastStatus: 'read', unread: 0 } : x)));
+        setSelected((s) => (s?.id === c.id ? { ...s, lastStatus: 'read', unread: 0 } : s));
+      })
+      .catch(() => { /* stays unread; it is retried the next time the chat is opened */ });
+  };
+
   const open = async (c: Conversation | null) => {
     setSelected(c);
     setMessages([]);
@@ -68,6 +80,7 @@ export function useInboxViewModel() {
     setMsgStatus('loading');
     try {
       const first = await inboxRepository.history(c, 1);
+      markSeen(c, first.items);
       setMessages(first.items);
       setOlderLeft(first.hasMore);
       setMsgStatus('ready');
