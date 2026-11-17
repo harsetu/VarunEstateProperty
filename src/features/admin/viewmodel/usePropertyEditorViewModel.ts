@@ -105,6 +105,7 @@ export function usePropertyEditorViewModel(routeId?: string) {
   const setField = <K extends keyof Property>(key: K, value: Property[K]) =>
     setDraft((d) => {
       if (!d) return d;
+      if (import.meta.env.DEV && key === 'status') console.debug('[editor] status ->', value, '(was', d.status, ')');
       if (key === 'priceValue' || key === 'priceMax') setServerPriceError(false);
       const next = { ...d, [key]: value };
       // Keep the display price in step with the number unless it was typed by hand
@@ -167,6 +168,7 @@ export function usePropertyEditorViewModel(routeId?: string) {
       mapEmbed: draft.mapEmbed.trim() || buildMapEmbedUrl(`${draft.title}, ${draft.sector}, ${flavor.market}`),
       videoUrl: draft.videoUrl?.trim() || undefined,
     };
+    if (import.meta.env.DEV) console.debug('[editor] saving, draft.status =', draft.status, ', sent status =', final.status);
     return run(async () => {
       await (isNew ? admin.createProperty(final) : admin.updateProperty(final));
       analytics.track(AnalyticsEvent.adminPublish, { isNew });
